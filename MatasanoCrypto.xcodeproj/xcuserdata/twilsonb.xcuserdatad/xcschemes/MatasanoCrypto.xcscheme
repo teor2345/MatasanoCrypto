@@ -15,8 +15,8 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "02913F841C3673E4001A5096"
-               BuildableName = "MatasanoCrypto"
-               BlueprintName = "MatasanoCrypto"
+               BuildableName = "s1c1-hex-to-base64"
+               BlueprintName = "s1c1-hex-to-base64"
                ReferencedContainer = "container:MatasanoCrypto.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -33,8 +33,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "02913F841C3673E4001A5096"
-            BuildableName = "MatasanoCrypto"
-            BlueprintName = "MatasanoCrypto"
+            BuildableName = "s1c1-hex-to-base64"
+            BlueprintName = "s1c1-hex-to-base64"
             ReferencedContainer = "container:MatasanoCrypto.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
@@ -56,8 +56,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "02913F841C3673E4001A5096"
-            BuildableName = "MatasanoCrypto"
-            BlueprintName = "MatasanoCrypto"
+            BuildableName = "s1c1-hex-to-base64"
+            BlueprintName = "s1c1-hex-to-base64"
             ReferencedContainer = "container:MatasanoCrypto.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
@@ -75,8 +75,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "02913F841C3673E4001A5096"
-            BuildableName = "MatasanoCrypto"
-            BlueprintName = "MatasanoCrypto"
+            BuildableName = "s1c1-hex-to-base64"
+            BlueprintName = "s1c1-hex-to-base64"
             ReferencedContainer = "container:MatasanoCrypto.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
