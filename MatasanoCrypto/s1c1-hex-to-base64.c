@@ -20,7 +20,7 @@
 
 const char *input_hexstr = "49276d206b696c6c696e6720796f757220627261696e206c696b65206120706f69736f6e6f7573206d757368726f6f6d";
 
-const char *expected_output_base64str = "SSdtIGtpbGxpbmcgeW91ciBicmFpbiBsaWtlIGEgcG9pc29ub3VzIG11c2hyb29t";
+const char *expected_base64str = "SSdtIGtpbGxpbmcgeW91ciBicmFpbiBsaWtlIGEgcG9pc29ub3VzIG11c2hyb29t";
 
 /* Declarations */
 
@@ -40,21 +40,25 @@ bool is_bytearray_consistent(const bytearray_t *bytearray);
 bytearray_t* bytearray_alloc(size_t length);
 void bytearray_free_(bytearray_t *bytearray);
 #define bytearray_free(bytearray) \
-do { \
-bytearray_free_(bytearray); \
-bytearray = NULL; \
-} while (0)
+  do { \
+    bytearray_free_(bytearray); \
+    bytearray = NULL; \
+  } while (0)
 
 void bytearray_set_checked(bytearray_t *bytearray, size_t index, uint8_t byte);
 uint8_t bytearray_get_checked(const bytearray_t *bytearray, size_t index);
+uint8_t *bytearray_pointer_checked(bytearray_t *bytearray, size_t index,
+                                   size_t range);
 
 /* Bytes & ASCII Characters */
 
 const uint8_t BYTE_BIT = 8;
 const uint8_t ASCII_CHARS_PER_BYTE = BYTE_BIT / CHAR_BIT;
 
-bool char_to_value(char c, char min, char max, uint8_t basis, uint8_t *value_out);
-bool value_to_char(uint8_t value, uint8_t min, uint8_t max, char basis, char *char_out);
+bool char_to_value(char c, char min, char max, uint8_t basis,
+                   uint8_t *value_out);
+bool value_to_char(uint8_t value, uint8_t min, uint8_t max, char basis,
+                   char *char_out);
 
 /* Hexadecimal Characters */
 
@@ -150,15 +154,18 @@ bool is_base64char_underscore_accepted(base64_variant_t variant);
 bool is_base64char_underscore_output(base64_variant_t variant);
 
 bool is_base64char_valid_padding(char base64char);
-bool is_base64char_valid(char base64char, base64_variant_t variant, bool accept_padding);
+bool is_base64char_valid(char base64char, base64_variant_t variant,
+                         bool accept_padding);
 
 uint8_t base64char_to_value(char base64char, base64_variant_t variant);
 char value_to_base64char(uint8_t value, base64_variant_t variant);
 
 /* Base64 Strings */
 
-void base64chars_to_bytes(const char base64chars[BASE64_CHARS_PER_BLOCK], uint8_t bytes_out[BASE64_BYTES_PER_BLOCK]);
-void bytes_to_base64chars(const uint8_t bytes[BASE64_BYTES_PER_BLOCK], char base64chars_out[BASE64_CHARS_PER_BLOCK]);
+void base64chars_to_bytes(const char base64chars[BASE64_CHARS_PER_BLOCK],
+                          uint8_t bytes_out[BASE64_BYTES_PER_BLOCK]);
+void bytes_to_base64chars(const uint8_t bytes[BASE64_BYTES_PER_BLOCK],
+                          char base64chars_out[BASE64_CHARS_PER_BLOCK]);
 
 bytearray_t *base64str_to_bytearray(const char *base64str);
 char *bytearray_to_base64str(const bytearray_t *bytearray);
@@ -268,9 +275,30 @@ bytearray_get_checked(const bytearray_t *bytearray, size_t index)
   return bytearray->bytes[index];
 }
 
-/* If c is between min and max, convert c to an integer, store it in *value_out,
- * and return true. *value_out is set to basis plus the difference between c and min.
- * If c is not between min and max, leave *value_out unmodified and return false. */
+/* Return &bytearray->bytes[index], checking that bytearray is valid and
+ * accesses to index and range bytes starting at index are within the
+ * bytearray's length.
+ * Accesses to bytearray[index + range] and higher are not checked.
+ * range must not be 0. */
+uint8_t *
+bytearray_pointer_checked(bytearray_t *bytearray, size_t index, size_t range)
+{
+  assert(bytearray);
+  assert(is_bytearray_consistent(bytearray));
+  assert(index < bytearray->length);
+  assert(range > 0);
+  /* This checks access to bytearray[index + range - 1], but not
+   * bytearray[index + range] */
+  assert(index + range <= bytearray->length);
+
+  return &bytearray->bytes[index];
+}
+
+/* If c is between min and max, convert c to an integer, store it 
+ * in *value_out, and return true. *value_out is set to basis plus the
+ * difference between c and min.
+ * If c is not between min and max, leave *value_out unmodified and return
+ * false. */
 bool
 char_to_value(char c, char min, char max, uint8_t basis, uint8_t *value_out)
 {
@@ -288,11 +316,14 @@ char_to_value(char c, char min, char max, uint8_t basis, uint8_t *value_out)
   return false;
 }
 
-/* If value is between min and max, convert value to a char, store it in *char_out,
- * and return true. *char_out is set to basis plus the difference between value and min.
- * If value is not between min and max, leave *char_out unmodified and return false. */
+/* If value is between min and max, convert value to a char, store it
+ * in *char_out, and return true. *char_out is set to basis plus the
+ * difference between value and min.
+ * If value is not between min and max, leave *char_out unmodified and return
+ * false. */
 bool
-value_to_char(uint8_t value, uint8_t min, uint8_t max, char basis, char *char_out)
+value_to_char(uint8_t value, uint8_t min, uint8_t max, char basis,
+              char *char_out)
 {
   assert(char_out != NULL);
 
@@ -382,7 +413,7 @@ hexchar_to_nybble(char hexchar, hex_case_t hexcase)
 
   if (char_to_value(low_hexchar, '0', '9', 0, &nybble)) {
     /* nybble has been set to the correct value */
-  } else if (char_to_value(low_hexchar, 'a', 'f', ('9' - '0'), &nybble)) {
+  } else if (char_to_value(low_hexchar, 'a', 'f', ('9' - '0' + 1), &nybble)) {
     /* nybble has been set to the correct value */
   } else {
     abort();
@@ -473,7 +504,7 @@ byte_to_hexpair(uint8_t byte, char* hexchar_msb_out, char* hexchar_lsb_out)
  * bytearray_t * has a zero length and NULL bytes pointer.
  * Accepts lowercase and uppercase hexadecimal characters.
  * Strings most not have an "0x" prefix, or any other non-hex characters,
- * including spaces.
+ * including whitespace.
  * The caller must bytearray_free() the returned bytearray_t. */
 bytearray_t *
 hexstr_to_bytearray(const char *hexstr)
@@ -510,9 +541,7 @@ hexstr_to_bytearray(const char *hexstr)
 
   /* Did we actually look at everything? */
   assert(i == bytearray->length);
-  assert(i * HEXCHARS_PER_BYTE == hexstr_len
-         || i * HEXCHARS_PER_BYTE == hexstr_len + 1);
-
+  assert(i == ceil_div(hexstr_len, HEXCHARS_PER_BYTE));
   assert(is_bytearray_consistent(bytearray));
 
   return bytearray;
@@ -523,7 +552,7 @@ hexstr_to_bytearray(const char *hexstr)
  * Never returns a NULL char *. If bytearray has a zero length, the returned
  * char * is "".
  * Outputs lowercase hexadecimal characters.
- * Outputs raw hexadecimal without an "0x" prefix or spaces.
+ * Outputs raw hexadecimal without an "0x" prefix or whitespace.
  * The caller must free() the returned string. */
 char *
 bytearray_to_hexstr(const bytearray_t *bytearray)
@@ -580,7 +609,8 @@ bytearray_to_asciistr(const bytearray_t *bytearray)
   assert(is_bytearray_consistent(bytearray));
 
   /* One extra byte for the terminating nul */
-  const size_t max_asciistr_len = bytearray->length * ESCAPED_HEXCHARS_PER_BYTE + 1;
+  const size_t max_asciistr_len = (bytearray->length * ESCAPED_HEXCHARS_PER_BYTE
+                                   + 1);
   /* If any bytes are printable ASCII, we will use 1 character for them rather
    * than 4 characters. This wastage is ok. */
   char * const asciistr = malloc(max_asciistr_len);
@@ -715,7 +745,8 @@ is_base64char_valid_padding(char base64char)
 /* Is base64char a valid base64 character from variant?
  * Also accepts padding bytes if accept_padding is true. */
 bool
-is_base64char_valid(char base64char, base64_variant_t variant, bool accept_padding)
+is_base64char_valid(char base64char, base64_variant_t variant,
+                    bool accept_padding)
 {
   const bool accept_plus = is_base64char_plus_accepted(variant);
   const bool accept_slash = is_base64char_slash_accepted(variant);
@@ -787,9 +818,10 @@ base64char_to_value(char base64char, base64_variant_t variant)
 
   if (char_to_value(base64char, 'A', 'Z', 0, &value)) {
     /* value has been set to the correct value */
-  } else if (char_to_value(base64char, 'a', 'z', ('Z' - 'A'), &value)) {
+  } else if (char_to_value(base64char, 'a', 'z', ('Z' - 'A' + 1), &value)) {
     /* value has been set to the correct value */
-  } else if (char_to_value(base64char, '0', '9', ('Z' - 'A') + ('z' - 'a'),
+  } else if (char_to_value(base64char, '0', '9',
+                           ('Z' - 'A' + 1) + ('z' - 'a' + 1),
                           &value)) {
     /* value has been set to the correct value */
   } else if (base64char == '+' || base64char == '-' || base64char == '.') {
@@ -851,14 +883,17 @@ value_to_base64char(uint8_t value, base64_variant_t variant)
  * Accepts any of the compatible variants in base64_variant_t.
  * Ignores padding characters, leaving the corresponding bits 0. */
 void
-base64chars_to_bytes(const char base64chars[BASE64_CHARS_PER_BLOCK], uint8_t bytes_out[BASE64_BYTES_PER_BLOCK])
+base64chars_to_bytes(const char base64chars[BASE64_CHARS_PER_BLOCK],
+                     uint8_t bytes_out[BASE64_BYTES_PER_BLOCK])
 {
   /* Check inputs are valid */
   assert(base64chars != NULL);
   assert(bytes_out != NULL);
+  const base64_variant_t variant = BASE64_ACCEPT_ANY_VARIANT;
 
   for (size_t i = 0; i < BASE64_CHARS_PER_BLOCK; i++) {
-    assert(is_base64char_valid(base64chars[i], BASE64_ACCEPT_ANY_VARIANT, true));
+    assert(is_base64char_valid(base64chars[i], variant,
+                               true));
   }
 
   /* Initialise output array
@@ -867,56 +902,32 @@ base64chars_to_bytes(const char base64chars[BASE64_CHARS_PER_BLOCK], uint8_t byt
     bytes_out[i] = 0;
   }
 
-  for (size_t i = 0; i < BASE64_CHARS_PER_BLOCK; i++) {
-    /* Skip padding characters */
-    if (is_base64char_valid_padding(base64chars[i])) {
-      continue;
-    }
+  /* Convert from characters */
+  const uint8_t v0 = base64char_to_value(base64chars[0], variant);
+  const uint8_t v1 = base64char_to_value(base64chars[1], variant);
+  const uint8_t v2 = base64char_to_value(base64chars[2], variant);
+  const uint8_t v3 = base64char_to_value(base64chars[3], variant);
 
-    const uint8_t value = base64char_to_value(base64chars[i], BASE64_ACCEPT_ANY_VARIANT);
-    /* This assertion means that we don't have to apply any masks */
-    assert(value < BASE64_BASE);
-
-    /* Split the value into the bits for the lower and upper bytes */
-
-    /* Find out how far this value needs to be shifted in the lower byte */
-    const uint8_t bit_shift = (BASE64_BIT * i) % BYTE_BIT;
-    assert(bit_shift < BYTE_BIT);
-    /* This masks off the upper bits, if any */
-    const uint8_t lower_bits = (uint8_t)(value << bit_shift);
-
-    uint8_t upper_bits = 0;
-    /* If any bits overflowed */
-    if (bit_shift > ((uint8_t)CHAR_BIT - BASE64_BIT)) {
-      assert(bit_shift + BASE64_BIT > BYTE_BIT);
-      const uint8_t bit_shift_overflow = (bit_shift + BASE64_BIT) % BYTE_BIT;
-      /* This masks off the lower bits */
-      upper_bits = value >> (BYTE_BIT - bit_shift_overflow);
-    }
-
-    /* Set the bytes based on the bit calculations above */
-    const size_t byte_position = (BASE64_BIT * i) / BYTE_BIT;
-    assert(byte_position < BASE64_BYTES_PER_BLOCK);
-    bytes_out[byte_position] |= lower_bits;
-
-    if (upper_bits) {
-      assert(byte_position + 1 < BASE64_BYTES_PER_BLOCK);
-      bytes_out[byte_position + 1] |= upper_bits;
-    }
-  }
+  /* Then rearrange some bits */
+  bytes_out[0] = (uint8_t)((v0 << 2) | (v1 >> 4));
+  bytes_out[1] = (uint8_t)((v1 << 4) | (v2 >> 2));
+  bytes_out[2] = (uint8_t)((v2 << 6) | v3);
 
   /* bytes_out[0..2] can take any valid value for the type */
 }
 
 /* Convert the 3 bytes into the equivalent 4 base64 characters base64chars_out.
- * bytes[0] becomes base64chars_out[0] and the high-order 2 bits of base64chars_out[1], and so on...
- * Outputs the BASE64_OUTPUT_PLUS_SLASH variant. */
+ * bytes[0] becomes base64chars_out[0] and the high-order 2 bits of
+ * base64chars_out[1], and so on...
+ * Outputs the BASE64_OUTPUT_PLUS_SLASH variant base64 characters. */
 void
-bytes_to_base64chars(const uint8_t bytes[BASE64_BYTES_PER_BLOCK], char base64chars_out[BASE64_CHARS_PER_BLOCK])
+bytes_to_base64chars(const uint8_t bytes[BASE64_BYTES_PER_BLOCK],
+                     char base64chars_out[BASE64_CHARS_PER_BLOCK])
 {
   assert(bytes != NULL);
   /* bytes[0..2] can take any valid value for the type */
   assert(base64chars_out != NULL);
+  const base64_variant_t variant = BASE64_OUTPUT_PLUS_SLASH;
 
   /* Initialise output array to invalid values
    * Later, we check that we've written a valid value to each base64 char */
@@ -924,103 +935,166 @@ bytes_to_base64chars(const uint8_t bytes[BASE64_BYTES_PER_BLOCK], char base64cha
     base64chars_out[i] = INVALID_BASE64CHAR;
   }
 
-  uint8_t overflow_bits = 0;
-  for (size_t i = 0; i < BASE64_BYTES_PER_BLOCK; i++) {
+  /* Rearrange some bits */
+  const uint8_t v0 = (uint8_t)(bytes[0] >> 2);
+  const uint8_t v1 = (uint8_t)(((bytes[0] & (BASE64_MASK >> 4)) << 4) | (bytes[1] >> 4));
+  const uint8_t v2 = (uint8_t)(((bytes[1] & (BASE64_MASK >> 2)) << 2) | (bytes[2] >> 6));
+  const uint8_t v3 = (uint8_t)(bytes[2] & BASE64_MASK);
 
-    /* Split the bytes into the bits for the current base64char,
-     * and any overflow bits */
-
-    /* Find out how far the  value needs to be shifted in the current base64char */
-    const uint8_t bit_shift = (BYTE_BIT * i) % BASE64_BIT;
-    assert(bit_shift < BYTE_BIT);
-    /* This masks off the upper bits, if any */
-    const uint8_t lower_bits = (uint8_t)(value << bit_shift);
-
-    uint8_t upper_bits = 0;
-    /* If any bits overflowed */
-    if (bit_shift > ((uint8_t)CHAR_BIT - BASE64_BIT)) {
-      assert(bit_shift + BASE64_BIT > BYTE_BIT);
-      const uint8_t bit_shift_overflow = (bit_shift + BASE64_BIT) % BYTE_BIT;
-      /* This masks off the lower bits */
-      upper_bits = value >> (BYTE_BIT - bit_shift_overflow);
-    }
-    
-
-
-    const char base64char = value_to_base64char(bytes[i], BASE64_OUTPUT_PLUS_SLASH);
-
-
-
-    /* Set the bytes based on the bit calculations above */
-    const size_t byte_position = (BASE64_BIT * i) / BYTE_BIT;
-    assert(byte_position < BASE64_BYTES_PER_BLOCK);
-    bytes_out[byte_position] |= lower_bits;
-
-    if (upper_bits) {
-      assert(byte_position + 1 < BASE64_BYTES_PER_BLOCK);
-      bytes_out[byte_position + 1] |= upper_bits;
-    }
-  }
-
-  /* bytes_out[0..2] can take any valid value for the type */
-
-  /* We don't need to apply HEX_MSB_MASK because the right shift erases the
-   * LSB nybble */
-  const uint8_t msb = byte >> HEX_BIT;
-  const uint8_t lsb = byte & HEX_LSB_MASK;
+  /* Then convert to characters */
+  base64chars_out[0] = value_to_base64char(v0, variant);
+  base64chars_out[1] = value_to_base64char(v1, variant);
+  base64chars_out[2] = value_to_base64char(v2, variant);
+  base64chars_out[3] = value_to_base64char(v3, variant);
 
   /* Check each output character is valid */
   for (size_t i = 0; i < BASE64_CHARS_PER_BLOCK; i++) {
-    assert(is_base64char_valid(base64chars_out[i], BASE64_OUTPUT_PLUS_SLASH, false));
+    assert(is_base64char_valid(base64chars_out[i], variant,
+                               false));
   }
 }
 
-uint8_t
-hexpair_to_byte(char hexchar_msb, char hexchar_lsb)
+/* Convert the nul-terminated base64 string into a newly allocated
+ * array of bytes.
+ * If base64str partially fills the final bytes, the remaining bits are zero
+ * (that is, we act like it has extra 'A's at the end of the string).
+ * Never returns a NULL bytearray_t *. If base64str is "", the returned
+ * bytearray_t * has a zero length and NULL bytes pointer.
+ * Accepts any of the compatible variants in base64_variant_t.
+ * Strings must not have any non-base64 characters, including whitespace.
+ * The caller must bytearray_free() the returned bytearray_t. */
+bytearray_t *
+base64str_to_bytearray(const char *base64str)
 {
-  assert(is_hexchar_valid(hexchar_msb, HEXCHAR_ACCEPT_ANY_CASE));
-  assert(is_hexchar_valid(hexchar_lsb, HEXCHAR_ACCEPT_ANY_CASE));
+  /* base64str can be of arbitrary length, including zero */
+  const size_t base64str_len = strlen(base64str);
 
-  const uint8_t msb = hexchar_to_nybble(hexchar_msb, HEXCHAR_ACCEPT_ANY_CASE);
-  const uint8_t lsb = hexchar_to_nybble(hexchar_lsb, HEXCHAR_ACCEPT_ANY_CASE);
-  uint8_t byte = 0;
+  bytearray_t *bytearray = NULL;
 
-  /* These assertions mean that we don't have to apply the HEX_MSB/LSB_MASKs */
-  assert(msb < HEX_BASE);
-  assert(lsb < HEX_BASE);
-  byte = (uint8_t)(msb << HEX_BIT) | lsb;
+  /* round up the length to the nearest block (3 bytes) if the base64 characters
+   * don't fit evenly into a block */
+  const size_t base64_block_count = ceil_div(base64str_len,
+                                             BASE64_CHARS_PER_BLOCK);
+  assert(base64_block_count == ceil_div(base64str_len * BASE64_BIT,
+                                        BASE64_BLOCK_BIT));
+  bytearray = bytearray_alloc(base64_block_count * BASE64_BYTES_PER_BLOCK);
+  assert(bytearray->length / base64_block_count == BASE64_BYTES_PER_BLOCK);
+  assert(is_bytearray_consistent(bytearray));
 
-  /* byte can take any valid value for the type */
-  return byte;
+  size_t i = 0;
+  for (i = 0; i < base64_block_count; i++) {
+    const size_t base64str_pos = i * BASE64_CHARS_PER_BLOCK;
+    const size_t bytearray_pos = i * BASE64_BYTES_PER_BLOCK;
+
+    assert(base64str_pos < base64str_len);
+    /* Allow for the entire block */
+    assert(bytearray_pos + BASE64_BYTES_PER_BLOCK - 1 < bytearray->length);
+
+    char base64_char_block[BASE64_CHARS_PER_BLOCK];
+
+    for (size_t j = 0; j < BASE64_CHARS_PER_BLOCK; j++) {
+      if (base64str_pos + j < base64str_len) {
+        assert(is_base64char_valid(base64str[base64str_pos + j],
+                                   BASE64_ACCEPT_ANY_VARIANT, true));
+        base64_char_block[j] = base64str[base64str_pos + j];
+      } else {
+        /* if we're missing a base64char for the final block, act like it's 'A' */
+        base64_char_block[j] = 'A';
+      }
+    }
+
+    uint8_t * const bytearray_pointer = bytearray_pointer_checked(
+                                                      bytearray,
+                                                      bytearray_pos,
+                                                      BASE64_BYTES_PER_BLOCK);
+    base64chars_to_bytes(base64_char_block, bytearray_pointer);
+
+    assert(is_bytearray_consistent(bytearray));
+  }
+
+  /* Did we actually look at everything? */
+  assert(i == bytearray->length / BASE64_BYTES_PER_BLOCK);
+  assert(i == ceil_div(base64str_len, BASE64_CHARS_PER_BLOCK));
+
+  assert(is_bytearray_consistent(bytearray));
+
+  /* The bytes in bytearray can take on any value */
+  return bytearray;
 }
 
-/* Convert the value byte into the equivalent hexadecimal characters
- * *hexchar_msb_out and *hexchar_lsb_out.
- * hexchar_msb_out is taken from the high-order 4 bits, and hexchar_lsb_out
- * is taken from the low-order 4 bits.
- * Outputs lowercase hexadecimal characters. */
-void
-byte_to_hexpair(uint8_t byte, char* hexchar_msb_out, char* hexchar_lsb_out)
+/* Convert the byte array bytearray into a newly allocated base64
+ * nul-terminated string.
+ * Never returns a NULL char *. If bytearray has a zero length, the returned
+ * char * is "".
+ * Outputs the BASE64_OUTPUT_PLUS_SLASH variant base64 characters.
+ * Outputs raw base64 without trailing padding characters or whitespace.
+ * (The output is rounded up to the nearest 24 bits, and any bits without
+ * corresponding bytearray bytes are set to zero.)
+ * The caller must free() the returned string. */
+char *
+bytearray_to_base64str(const bytearray_t *bytearray)
 {
-  /* byte can take any valid value for the type */
-  assert(hexchar_msb_out != NULL);
-  assert(hexchar_lsb_out != NULL);
+  assert(bytearray != NULL);
+  assert(is_bytearray_consistent(bytearray));
 
-  /* We don't need to apply HEX_MSB_MASK because the right shift erases the
-   * LSB nybble */
-  const uint8_t msb = byte >> HEX_BIT;
-  const uint8_t lsb = byte & HEX_LSB_MASK;
+  /* round up the length to the nearest block (4 base64 chars) if the bytes
+   * don't fit evenly into a block */
+  const size_t base64_block_count = ceil_div(bytearray->length,
+                                             BASE64_BYTES_PER_BLOCK);
+  assert(base64_block_count == ceil_div(bytearray->length * BYTE_BIT,
+                                        BASE64_BLOCK_BIT));
+  /* One extra byte for the terminating nul */
+  const size_t base64str_len = base64_block_count * BASE64_CHARS_PER_BLOCK + 1;
+  if (base64_block_count > 0) {
+    assert((base64str_len - 1) / base64_block_count == BASE64_CHARS_PER_BLOCK);
+  } else {
+    assert((base64str_len - 1) == 0);
+  }
+  char * const base64str = malloc(base64str_len);
+  assert(base64str != NULL);
+  /* Avoid having to add the terminating nul later */
+  memset(base64str, 0, base64str_len);
 
-  *hexchar_msb_out = nybble_to_hexchar(msb, HEXCHAR_OUTPUT_LOWERCASE);
-  assert(is_hexchar_valid(*hexchar_msb_out, HEXCHAR_ACCEPT_LOWERCASE_ONLY));
+  size_t i = 0;
+  for (i = 0; i < base64_block_count; i++) {
+    const size_t base64str_pos = i * BASE64_CHARS_PER_BLOCK;
+    const size_t bytearray_pos = i * BASE64_BYTES_PER_BLOCK;
 
-  *hexchar_lsb_out = nybble_to_hexchar(lsb, HEXCHAR_OUTPUT_LOWERCASE);
-  assert(is_hexchar_valid(*hexchar_lsb_out, HEXCHAR_ACCEPT_LOWERCASE_ONLY));
+    /* Allow for the entire block */
+    assert(base64str_pos + BASE64_CHARS_PER_BLOCK - 1 < base64str_len - 1);
+    assert(bytearray_pos < bytearray->length);
+
+    uint8_t base64_byte_block[BASE64_BYTES_PER_BLOCK];
+
+    for (size_t j = 0; j < BASE64_BYTES_PER_BLOCK; j++) {
+      if (bytearray_pos + j < bytearray->length) {
+        base64_byte_block[j] = bytearray_get_checked(bytearray,
+                                                     bytearray_pos + j);
+      } else {
+        /* if we're missing a byte for the final block, act like it's 0 */
+        base64_byte_block[j] = 0;
+      }
+    }
+
+    assert(base64str_pos < base64str_len - 1);
+    assert(base64str_pos + BASE64_CHARS_PER_BLOCK <= base64str_len - 1);
+    bytes_to_base64chars(base64_byte_block, &base64str[base64str_pos]);
+
+    assert(is_bytearray_consistent(bytearray));
+  }
+
+  /* Did we actually look at everything? */
+  assert(i == ceil_div(bytearray->length, BASE64_BYTES_PER_BLOCK));
+  assert(i == (base64str_len - 1) / BASE64_CHARS_PER_BLOCK);
+
+  /* Check each character is valid base64 */
+  for (size_t k = 0; k < strlen(base64str); k++) {
+    assert(is_base64char_valid(base64str[k], BASE64_OUTPUT_PLUS_SLASH,
+                               false));
+  }
+
+  return base64str;
 }
-
-
-bytearray_t *base64str_to_bytearray(const char *base64str);
-char *bytearray_to_base64str(const bytearray_t *bytearray);
 
 int
 main(int argc, const char * argv[])
@@ -1028,16 +1102,45 @@ main(int argc, const char * argv[])
   (void)argc;
   (void)argv;
 
-  printf("Hex String:    %s\n", input_hexstr);
+  printf("Hex:                 %s\n", input_hexstr);
 
   bytearray_t *input_bytearray = hexstr_to_bytearray(input_hexstr);
-  printf("Bytes:         %s\n", (char *)input_bytearray->bytes);
+  printf("Bytes:               %s\n", (char *)input_bytearray->bytes);
 
   char *input_asciistr = bytearray_to_asciistr(input_bytearray);
-  printf("Escaped Bytes: %s\n", input_asciistr);
+  printf("Escaped Bytes:       %s\n", input_asciistr);
+
+  char *input_base64str = bytearray_to_base64str(input_bytearray);
+  printf("Base64:              %s\n", input_base64str);
+
+  printf("Base64 Expected:     %s\n", expected_base64str);
+
+  if (!strcmp(input_base64str, expected_base64str)) {
+    printf("Calculated Output matches Expected Output\n");
+  } else {
+    printf("Calculated Output differs from Expected Output\n");
+  }
+
+  bytearray_t *expected_bytearray = base64str_to_bytearray(expected_base64str);
+  printf("Bytes Expected:      %s\n", (char *)expected_bytearray->bytes);
+
+  char *expected_asciistr = bytearray_to_asciistr(expected_bytearray);
+  printf("Escaped Expected:    %s\n", expected_asciistr);
+
+  char *expected_hexstr = bytearray_to_hexstr(expected_bytearray);
+  printf("Expected Hex:        %s\n", expected_hexstr);
+
+  if (!strcmp(input_hexstr, expected_hexstr)) {
+    printf("Calculated Input matches Actual Input\n");
+  } else {
+    printf("Calculated Input differs from Actual Input\n");
+  }
 
   bytearray_free(input_bytearray);
   free(input_asciistr);
-
+  free(input_base64str);
+  bytearray_free(expected_bytearray);
+  free(expected_asciistr);
+  free(expected_hexstr);
   return 0;
 }
