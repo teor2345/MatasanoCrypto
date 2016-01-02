@@ -36,8 +36,12 @@ const uint8_t HEX_MSB_MASK = HEX_LSB_MASK << HEX_BITS;
 
 const uint8_t CHAR_BITS = 8;
 const uint8_t HEXCHARS_PER_BYTE = CHAR_BITS / HEX_BITS;
+/* How many characters does it take to encode each byte as \xHH? */
+const uint8_t ESCAPED_HEXCHARS_PER_BYTE = HEXCHARS_PER_BYTE + 2;
+const uint8_t ASCII_CHARS_PER_BYTE = 1;
 
-/* Accept hex inputs or produce hex outputs with the specified letter case(s). */
+/* Accept hex inputs or produce hex outputs with the specified letter case(s).
+ */
 typedef enum {
   HEXCHAR_ACCEPT_ANY_CASE,
   HEXCHAR_ACCEPT_LOWERCASE_ONLY,
@@ -60,21 +64,32 @@ char nybble_to_hexchar(uint8_t nybble, hexchar_case_t hexcase);
 /* Hexadecimal Strings */
 
 uint8_t hexpair_to_byte(char hexchar_msb, char hexchar_lsb);
-void byte_to_hexpair(uint8_t byte, char* hexchar_msb_out, char* hexchar_lsb_out);
+void byte_to_hexpair(uint8_t byte, char* hexchar_msb_out,
+                     char* hexchar_lsb_out);
 
 typedef struct {
   size_t length;
   uint8_t *bytes;
-} byte_array_t;
+} bytearray_t;
 
-bool is_bytearray_consistent(const byte_array_t *bytearray);
-byte_array_t* bytearray_alloc(size_t length);
-void bytearray_free_(byte_array_t *bytearray);
-#define bytearray_free(bytearray) do { bytearray_free_(bytearray); bytearray = NULL; } while (0)
-#define bytearray_checked(bytearray, index) (assert(index < bytearray->length), bytearray->bytes[index])
+bool is_bytearray_consistent(const bytearray_t *bytearray);
 
-byte_array_t *hexstr_to_bytearray(const char *hexstr);
-char *bytearray_to_hexstr(const byte_array_t *bytearray);
+bytearray_t* bytearray_alloc(size_t length);
+void bytearray_free_(bytearray_t *bytearray);
+#define bytearray_free(bytearray) \
+  do { \
+    bytearray_free_(bytearray); \
+    bytearray = NULL; \
+  } while (0)
+
+void bytearray_set_checked(bytearray_t *bytearray, size_t index, uint8_t byte);
+uint8_t bytearray_get_checked(const bytearray_t *bytearray, size_t index);
+
+bytearray_t *hexstr_to_bytearray(const char *hexstr);
+char *bytearray_to_hexstr(const bytearray_t *bytearray);
+
+bool is_byte_ascii_printable(uint8_t byte);
+char *bytearray_to_asciistr(const bytearray_t *bytearray);
 
 /* Definitions */
 
@@ -249,20 +264,21 @@ byte_to_hexpair(uint8_t byte, char* hexchar_msb_out, char* hexchar_lsb_out)
 
 /* Are the length and bytes fields of bytearray consistent? */
 bool
-is_bytearray_consistent(const byte_array_t *bytearray)
+is_bytearray_consistent(const bytearray_t *bytearray)
 {
   return (bytearray != NULL
           && ((bytearray->length > 0 && bytearray->bytes != NULL)
               || (bytearray->length == 0 && bytearray->bytes == NULL)));
 }
 
-/* Allocate and return a byte_array_t of length using malloc().
+/* Allocate and return a bytearray_t of length using malloc().
  * Must be freed using bytearray_free(). */
-byte_array_t* bytearray_alloc(size_t length)
+bytearray_t *
+bytearray_alloc(size_t length)
 {
   assert(length > 0);
 
-  byte_array_t *bytearray = malloc(sizeof(*bytearray));
+  bytearray_t *bytearray = malloc(sizeof(*bytearray));
   bytearray->length = length;
   if (length > 0) {
     bytearray->bytes = malloc(bytearray->length);
@@ -280,13 +296,14 @@ byte_array_t* bytearray_alloc(size_t length)
   return bytearray;
 }
 
-/* Free a byte_array_t allocated using bytearray_alloc().
+/* Free a bytearray_t allocated using bytearray_alloc().
  * If bytearray is NULL, nothing happens.
  * Use bytearray_free to set bytearray to NULL as well.
- * (Setting a byte_array_t * to NULL after each free is a great way to avoid
- * use-after-free errors - as long as there are no other copies of the pointer.)
- */
-void bytearray_free_(byte_array_t *bytearray)
+ * (Setting a bytearray_t * to NULL after each free is a great way to avoid
+ * use-after-free errors - as long as there are no other copies of the
+ * pointer.) */
+void
+bytearray_free_(bytearray_t *bytearray)
 {
   if (bytearray == NULL) {
     return;
@@ -307,31 +324,60 @@ void bytearray_free_(byte_array_t *bytearray)
   free(bytearray);
 }
 
+/* Set bytearray->bytes[index] to byte, checking that bytearray is valid and
+ * index is within the bytearray's length. */
+void
+bytearray_set_checked(bytearray_t *bytearray, size_t index, uint8_t byte)
+{
+  assert(bytearray);
+  assert(is_bytearray_consistent(bytearray));
+  assert(index < bytearray->length);
+  /* byte can take any valid value for the type */
+
+  bytearray->bytes[index] = byte;
+
+  assert(is_bytearray_consistent(bytearray));
+}
+
+/* Return bytearray->bytes[index], checking that bytearray is valid and index
+ * is within the bytearray's length. */
+uint8_t
+bytearray_get_checked(const bytearray_t *bytearray, size_t index)
+{
+  assert(bytearray);
+  assert(is_bytearray_consistent(bytearray));
+  assert(index < bytearray->length);
+
+  return bytearray->bytes[index];
+}
+
 /* Convert the nul-terminated hexadecimal string hexstr into a newly allocated
  * array of bytes.
  * If hexstr partially fills the final byte, the remaining bits are zero
  * (that is, we act like it has an extra '0' at the end of the string).
- * Never returns a NULL byte_array_t *. If hexstr is "", the returned
- * byte_array_t * has a zero length and NULL bytes pointer.
+ * Never returns a NULL bytearray_t *. If hexstr is "", the returned
+ * bytearray_t * has a zero length and NULL bytes pointer.
  * Accepts lowercase and uppercase hexadecimal characters.
  * Strings most not have an "0x" prefix, or any other non-hex characters,
  * including spaces.
- * The caller must bytearray_free() the returned byte_array_t. */
-byte_array_t *hexstr_to_bytearray(const char *hexstr)
+ * The caller must bytearray_free() the returned bytearray_t. */
+bytearray_t *
+hexstr_to_bytearray(const char *hexstr)
 {
   /* hexstr can be of arbitrary length, including zero */
   const size_t hexstr_len = strlen(hexstr);
 
-  byte_array_t *bytearray = NULL;
+  bytearray_t *bytearray = NULL;
 
   /* round up the length if there is an odd number of hex characters */
   bytearray = bytearray_alloc(ceil_div(hexstr_len, HEXCHARS_PER_BYTE));
-  assert(bytearray->length == (hexstr_len / 2) + (hexstr_len % 2));
+  assert(bytearray->length == ((hexstr_len / HEXCHARS_PER_BYTE)
+                               + (hexstr_len % HEXCHARS_PER_BYTE)));
   assert(is_bytearray_consistent(bytearray));
 
   size_t i = 0;
   for (i = 0; i < bytearray->length; i++) {
-    const size_t hexstr_pos = i * 2;
+    const size_t hexstr_pos = i * HEXCHARS_PER_BYTE;
 
     assert(hexstr_pos < hexstr_len);
     const char hexchar_msb = hexstr[hexstr_pos];
@@ -342,15 +388,16 @@ byte_array_t *hexstr_to_bytearray(const char *hexstr)
       hexchar_lsb = hexstr[hexstr_pos + 1];
     }
 
-    assert(i < bytearray->length);
-    bytearray_checked(bytearray, i) = hexpair_to_byte(hexchar_msb, hexchar_lsb);
+    uint8_t byte = hexpair_to_byte(hexchar_msb, hexchar_lsb);
+    bytearray_set_checked(bytearray, i, byte);
 
     assert(is_bytearray_consistent(bytearray));
   }
 
   /* Did we actually look at everything? */
   assert(i == bytearray->length);
-  assert(i * 2 == hexstr_len || i * 2 == hexstr_len + 1);
+  assert(i * HEXCHARS_PER_BYTE == hexstr_len
+         || i * HEXCHARS_PER_BYTE == hexstr_len + 1);
 
   assert(is_bytearray_consistent(bytearray));
 
@@ -360,17 +407,18 @@ byte_array_t *hexstr_to_bytearray(const char *hexstr)
 /* Convert the byte array bytearray into a newly allocated hexadecimal
  * nul-terminated string.
  * Never returns a NULL char *. If bytearray has a zero length, the returned
- * char * is a copy of "".
+ * char * is "".
  * Outputs lowercase hexadecimal characters.
  * Outputs raw hexadecimal without an "0x" prefix or spaces.
  * The caller must free() the returned string. */
-char *bytearray_to_hexstr(const byte_array_t *bytearray)
+char *
+bytearray_to_hexstr(const bytearray_t *bytearray)
 {
   assert(bytearray != NULL);
   assert(is_bytearray_consistent(bytearray));
 
   /* One extra byte for the terminating nul */
-  size_t hexstr_len = bytearray->length * 2 + 1;
+  size_t hexstr_len = bytearray->length * HEXCHARS_PER_BYTE + 1;
   char *hexstr = malloc(hexstr_len);
   assert(hexstr != NULL);
   /* Avoid having to add the terminating nul later */
@@ -378,21 +426,81 @@ char *bytearray_to_hexstr(const byte_array_t *bytearray)
 
   size_t i = 0;
   for (i = 0; i < bytearray->length; i++) {
-    const size_t hexstr_pos = i * 2;
+    const size_t hexstr_pos = i * HEXCHARS_PER_BYTE;
 
     /* Don't ever overwrite the terminating nul, and allow for the second
      * hexchar */
     assert(hexstr_pos + 1 < hexstr_len - 1);
-    assert(i < bytearray->length);
-    byte_to_hexpair(bytearray->bytes[i], &hexstr[hexstr_pos],
-                    &hexstr[hexstr_pos + 1]);
+    uint8_t byte = bytearray_get_checked(bytearray, i);
+    byte_to_hexpair(byte, &hexstr[hexstr_pos], &hexstr[hexstr_pos + 1]);
   }
 
   /* Did we actually look at everything, except the terminating nul? */
   assert(i == bytearray->length);
-  assert(i * 2 == hexstr_len - 1);
+  assert(i * HEXCHARS_PER_BYTE == hexstr_len - 1);
 
   return hexstr;
+}
+
+/* Is byte a printable ASCII character?
+ * Assumes that byte will be type cast into an ASCII char.
+ * Avoids identifying control characters as printable, because printing them
+ * can make a mess of aligned text. (For example: tabs take up multiple
+ * columns when printed.) */
+bool
+is_byte_ascii_printable(uint8_t byte)
+{
+  return byte >= ' ' && byte <= '~';
+}
+
+/* Convert the byte array bytearray into a newly allocated ASCII
+ * nul-terminated string, escaping non-printable characters using "\xHH".
+ * Never returns a NULL char *. If bytearray has a zero length, the returned
+ * char * is "".
+ * Outputs lowercase hexadecimal characters in escapes.
+ * The caller must free() the returned string. */
+char *
+bytearray_to_asciistr(const bytearray_t *bytearray)
+{
+  assert(bytearray != NULL);
+  assert(is_bytearray_consistent(bytearray));
+
+  /* One extra byte for the terminating nul */
+  size_t max_asciistr_len = bytearray->length * ESCAPED_HEXCHARS_PER_BYTE + 1;
+  /* If any bytes are printable ASCII, we will use 1 character for them rather
+   * than 4 characters. This wastage is ok. */
+  char *asciistr = malloc(max_asciistr_len);
+  assert(asciistr != NULL);
+  /* Avoid having to add the terminating nul later */
+  memset(asciistr, 0, max_asciistr_len);
+
+  size_t i = 0;
+  size_t asciistr_pos = 0;
+  for (i = 0; i < bytearray->length; i++) {
+    /* Don't ever overwrite the terminating nul, and allow up to
+     * ESCAPED_HEXCHARS_PER_BYTE */
+    assert(asciistr_pos + (ESCAPED_HEXCHARS_PER_BYTE - 1)
+           < max_asciistr_len - 1);
+
+    uint8_t byte = bytearray_get_checked(bytearray, i);
+    if (is_byte_ascii_printable(byte)) {
+      asciistr[asciistr_pos] = (char)byte;
+      asciistr_pos += ASCII_CHARS_PER_BYTE;
+    } else {
+      asciistr[asciistr_pos] = '\\';
+      asciistr[asciistr_pos + 1] = 'x';
+      byte_to_hexpair(byte, &asciistr[asciistr_pos + 2],
+                      &asciistr[asciistr_pos + 3]);
+      asciistr_pos += ESCAPED_HEXCHARS_PER_BYTE;
+    }
+  }
+
+  /* Did we actually look at everything, except the terminating nul? */
+  assert(i == bytearray->length);
+  assert(i * ASCII_CHARS_PER_BYTE <= max_asciistr_len - 1);
+  assert(i * ESCAPED_HEXCHARS_PER_BYTE == max_asciistr_len - 1);
+
+  return asciistr;
 }
 
 int
@@ -401,15 +509,16 @@ main(int argc, const char * argv[])
   (void)argc;
   (void)argv;
 
-  size_t input_byte_len = (strlen(input_hexstr) + 1)/2;
-  uint8_t *input_byte_data = malloc(input_byte_len);
+  printf("Hex String:    %s\n", input_hexstr);
 
-  for (size_t i = 0; i < input_byte_len; i++) {
-    uint8_t h1 = 0;
-    uint8_t h2 = 0;
+  bytearray_t *input_bytearray = hexstr_to_bytearray(input_hexstr);
+  printf("Bytes:         %s\n", (char *)input_bytearray->bytes);
 
-  }
+  char *input_asciistr = bytearray_to_asciistr(input_bytearray);
+  printf("Escaped Bytes: %s\n", input_asciistr);
 
-  free(input_byte_data);
+  bytearray_free(input_bytearray);
+  free(input_asciistr);
+
   return 0;
 }
