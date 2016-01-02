@@ -8,23 +8,26 @@
 
 /* Begin PBXBuildFile section */
 		02913F891C3673E4001A5096 /* s1c1-hex-to-base64.c in Sources */ = {isa = PBXBuildFile; fileRef = 02913F881C3673E4001A5096 /* s1c1-hex-to-base64.c */; };
+		02913F921C37C9C7001A5096 /* calc.c in Sources */ = {isa = PBXBuildFile; fileRef = 02913F901C37C9C7001A5096 /* calc.c */; };
+		02913F951C37CA9C001A5096 /* bytearray.c in Sources */ = {isa = PBXBuildFile; fileRef = 02913F931C37CA9C001A5096 /* bytearray.c */; };
+		02913F981C37CC10001A5096 /* char.c in Sources */ = {isa = PBXBuildFile; fileRef = 02913F961C37CC10001A5096 /* char.c */; };
+		02913F9B1C37CD83001A5096 /* hex.c in Sources */ = {isa = PBXBuildFile; fileRef = 02913F991C37CD83001A5096 /* hex.c */; };
+		02913F9E1C37CEAD001A5096 /* base64.c in Sources */ = {isa = PBXBuildFile; fileRef = 02913F9C1C37CEAD001A5096 /* base64.c */; };
 /* End PBXBuildFile section */
-
-/* Begin PBXCopyFilesBuildPhase section */
-		02913F831C3673E4001A5096 /* CopyFiles */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = /usr/share/man/man1/;
-			dstSubfolderSpec = 0;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 1;
-		};
-/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		02913F851C3673E4001A5096 /* s1c1-hex-to-base64 */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "s1c1-hex-to-base64"; sourceTree = BUILT_PRODUCTS_DIR; };
 		02913F881C3673E4001A5096 /* s1c1-hex-to-base64.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = "s1c1-hex-to-base64.c"; sourceTree = "<group>"; };
+		02913F901C37C9C7001A5096 /* calc.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = calc.c; path = Library/calc.c; sourceTree = "<group>"; };
+		02913F911C37C9C7001A5096 /* calc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = calc.h; path = Library/calc.h; sourceTree = "<group>"; };
+		02913F931C37CA9C001A5096 /* bytearray.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = bytearray.c; path = Library/bytearray.c; sourceTree = "<group>"; };
+		02913F941C37CA9C001A5096 /* bytearray.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = bytearray.h; path = Library/bytearray.h; sourceTree = "<group>"; };
+		02913F961C37CC10001A5096 /* char.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = char.c; path = Library/char.c; sourceTree = "<group>"; };
+		02913F971C37CC10001A5096 /* char.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = char.h; path = Library/char.h; sourceTree = "<group>"; };
+		02913F991C37CD83001A5096 /* hex.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = hex.c; path = Library/hex.c; sourceTree = "<group>"; };
+		02913F9A1C37CD83001A5096 /* hex.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = hex.h; path = Library/hex.h; sourceTree = "<group>"; };
+		02913F9C1C37CEAD001A5096 /* base64.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = base64.c; path = Library/base64.c; sourceTree = "<group>"; };
+		02913F9D1C37CEAD001A5096 /* base64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = base64.h; path = Library/base64.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -41,7 +44,8 @@
 		02913F7C1C3673E4001A5096 = {
 			isa = PBXGroup;
 			children = (
-				02913F871C3673E4001A5096 /* MatasanoCrypto */,
+				02913F8F1C37C964001A5096 /* Library */,
+				02913F871C3673E4001A5096 /* Challenges */,
 				02913F861C3673E4001A5096 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -54,12 +58,29 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		02913F871C3673E4001A5096 /* MatasanoCrypto */ = {
+		02913F871C3673E4001A5096 /* Challenges */ = {
 			isa = PBXGroup;
 			children = (
 				02913F881C3673E4001A5096 /* s1c1-hex-to-base64.c */,
 			);
-			path = MatasanoCrypto;
+			path = Challenges;
+			sourceTree = "<group>";
+		};
+		02913F8F1C37C964001A5096 /* Library */ = {
+			isa = PBXGroup;
+			children = (
+				02913F9C1C37CEAD001A5096 /* base64.c */,
+				02913F9D1C37CEAD001A5096 /* base64.h */,
+				02913F931C37CA9C001A5096 /* bytearray.c */,
+				02913F941C37CA9C001A5096 /* bytearray.h */,
+				02913F901C37C9C7001A5096 /* calc.c */,
+				02913F911C37C9C7001A5096 /* calc.h */,
+				02913F961C37CC10001A5096 /* char.c */,
+				02913F971C37CC10001A5096 /* char.h */,
+				02913F991C37CD83001A5096 /* hex.c */,
+				02913F9A1C37CD83001A5096 /* hex.h */,
+			);
+			name = Library;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -71,7 +92,6 @@
 			buildPhases = (
 				02913F811C3673E4001A5096 /* Sources */,
 				02913F821C3673E4001A5096 /* Frameworks */,
-				02913F831C3673E4001A5096 /* CopyFiles */,
 			);
 			buildRules = (
 			);
@@ -119,6 +139,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				02913F891C3673E4001A5096 /* s1c1-hex-to-base64.c in Sources */,
+				02913F981C37CC10001A5096 /* char.c in Sources */,
+				02913F921C37C9C7001A5096 /* calc.c in Sources */,
+				02913F951C37CA9C001A5096 /* bytearray.c in Sources */,
+				02913F9E1C37CEAD001A5096 /* base64.c in Sources */,
+				02913F9B1C37CD83001A5096 /* hex.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -152,7 +177,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CLANG_WARN__EXIT_TIME_DESTRUCTORS = YES;
-				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_IDENTITY = "";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_NS_ASSERTIONS = YES;
@@ -224,7 +249,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CLANG_WARN__EXIT_TIME_DESTRUCTORS = YES;
-				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_IDENTITY = "";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = YES;
