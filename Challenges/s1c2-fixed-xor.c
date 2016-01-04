@@ -15,6 +15,7 @@
 #include "bit_ops.h"
 #include "bytearray.h"
 #include "hex.h"
+#include "score.h"
 
 /* Challenge-Specific Constants */
 

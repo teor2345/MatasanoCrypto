@@ -60,8 +60,4 @@ void byte_to_hexpair(uint8_t byte, char* hexchar_msb_out,
 bytearray_t *hexstr_to_bytearray(const char *hexstr);
 char *bytearray_to_hexstr(const bytearray_t *bytearray);
 
-bool is_byte_ascii_printable(uint8_t byte);
-/* Uses hexadecimal conversion internally */
-char *bytearray_to_asciistr(const bytearray_t *bytearray);
-
 #endif /* hex_h */
