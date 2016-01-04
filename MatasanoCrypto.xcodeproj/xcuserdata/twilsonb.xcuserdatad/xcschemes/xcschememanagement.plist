@@ -14,6 +14,11 @@
 			<key>orderHint</key>
 			<integer>1</integer>
 		</dict>
+		<key>s1c3-byte-xor-cipher copy.xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>3</integer>
+		</dict>
 		<key>s1c3-byte-xor-cipher.xcscheme</key>
 		<dict>
 			<key>orderHint</key>
@@ -33,6 +38,11 @@
 			<true/>
 		</dict>
 		<key>02913FB11C3A7ECC001A5096</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>02913FC51C3B29F2001A5096</key>
 		<dict>
 			<key>primary</key>
 			<true/>

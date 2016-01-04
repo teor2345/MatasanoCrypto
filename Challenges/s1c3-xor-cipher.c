@@ -1,5 +1,5 @@
 //
-//  s1c3-byte-xor-cipher.c
+//  s1c3-xor-cipher.c
 //  Find the key for a single-byte XOR
 //  MatasanoCrypto
 //

@@ -1,5 +1,5 @@
 //
-//  s1c2-fixed-xor.c
+//  s1c2-xor-fixed.c
 //  XOR two byte buffers of equal length
 //  MatasanoCrypto
 //

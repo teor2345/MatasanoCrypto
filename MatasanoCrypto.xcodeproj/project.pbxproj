@@ -17,17 +17,24 @@
 		02913FA31C3A73BD001A5096 /* calc.c in Sources */ = {isa = PBXBuildFile; fileRef = 02913F901C37C9C7001A5096 /* calc.c */; };
 		02913FA41C3A73BD001A5096 /* bytearray.c in Sources */ = {isa = PBXBuildFile; fileRef = 02913F931C37CA9C001A5096 /* bytearray.c */; };
 		02913FA61C3A73BD001A5096 /* hex.c in Sources */ = {isa = PBXBuildFile; fileRef = 02913F991C37CD83001A5096 /* hex.c */; };
-		02913FAD1C3A747A001A5096 /* s1c2-fixed-xor.c in Sources */ = {isa = PBXBuildFile; fileRef = 02913FAC1C3A747A001A5096 /* s1c2-fixed-xor.c */; };
+		02913FAD1C3A747A001A5096 /* s1c2-xor-fixed.c in Sources */ = {isa = PBXBuildFile; fileRef = 02913FAC1C3A747A001A5096 /* s1c2-xor-fixed.c */; };
 		02913FB01C3A7769001A5096 /* bit_ops.c in Sources */ = {isa = PBXBuildFile; fileRef = 02913FAE1C3A7769001A5096 /* bit_ops.c */; };
 		02913FB31C3A7ECC001A5096 /* char.c in Sources */ = {isa = PBXBuildFile; fileRef = 02913F961C37CC10001A5096 /* char.c */; };
 		02913FB41C3A7ECC001A5096 /* calc.c in Sources */ = {isa = PBXBuildFile; fileRef = 02913F901C37C9C7001A5096 /* calc.c */; };
 		02913FB51C3A7ECC001A5096 /* bit_ops.c in Sources */ = {isa = PBXBuildFile; fileRef = 02913FAE1C3A7769001A5096 /* bit_ops.c */; };
 		02913FB71C3A7ECC001A5096 /* bytearray.c in Sources */ = {isa = PBXBuildFile; fileRef = 02913F931C37CA9C001A5096 /* bytearray.c */; };
 		02913FB81C3A7ECC001A5096 /* hex.c in Sources */ = {isa = PBXBuildFile; fileRef = 02913F991C37CD83001A5096 /* hex.c */; };
-		02913FBF1C3A7F21001A5096 /* s1c3-byte-xor-cipher.c in Sources */ = {isa = PBXBuildFile; fileRef = 02913FBE1C3A7F21001A5096 /* s1c3-byte-xor-cipher.c */; };
+		02913FBF1C3A7F21001A5096 /* s1c3-xor-cipher.c in Sources */ = {isa = PBXBuildFile; fileRef = 02913FBE1C3A7F21001A5096 /* s1c3-xor-cipher.c */; };
 		02913FC21C3A885D001A5096 /* score.c in Sources */ = {isa = PBXBuildFile; fileRef = 02913FC01C3A885D001A5096 /* score.c */; };
 		02913FC31C3A8DC3001A5096 /* score.c in Sources */ = {isa = PBXBuildFile; fileRef = 02913FC01C3A885D001A5096 /* score.c */; };
 		02913FC41C3A8DC4001A5096 /* score.c in Sources */ = {isa = PBXBuildFile; fileRef = 02913FC01C3A885D001A5096 /* score.c */; };
+		02913FC71C3B29F2001A5096 /* score.c in Sources */ = {isa = PBXBuildFile; fileRef = 02913FC01C3A885D001A5096 /* score.c */; };
+		02913FC81C3B29F2001A5096 /* char.c in Sources */ = {isa = PBXBuildFile; fileRef = 02913F961C37CC10001A5096 /* char.c */; };
+		02913FC91C3B29F2001A5096 /* calc.c in Sources */ = {isa = PBXBuildFile; fileRef = 02913F901C37C9C7001A5096 /* calc.c */; };
+		02913FCB1C3B29F2001A5096 /* bit_ops.c in Sources */ = {isa = PBXBuildFile; fileRef = 02913FAE1C3A7769001A5096 /* bit_ops.c */; };
+		02913FCC1C3B29F2001A5096 /* bytearray.c in Sources */ = {isa = PBXBuildFile; fileRef = 02913F931C37CA9C001A5096 /* bytearray.c */; };
+		02913FCD1C3B29F2001A5096 /* hex.c in Sources */ = {isa = PBXBuildFile; fileRef = 02913F991C37CD83001A5096 /* hex.c */; };
+		02913FD41C3B2BAB001A5096 /* s1c4-xor-cipher-detect.c in Sources */ = {isa = PBXBuildFile; fileRef = 02913FD31C3B2BAB001A5096 /* s1c4-xor-cipher-detect.c */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -43,14 +50,16 @@
 		02913F9A1C37CD83001A5096 /* hex.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = hex.h; path = Library/hex.h; sourceTree = "<group>"; };
 		02913F9C1C37CEAD001A5096 /* base64.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = base64.c; path = Library/base64.c; sourceTree = "<group>"; };
 		02913F9D1C37CEAD001A5096 /* base64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = base64.h; path = Library/base64.h; sourceTree = "<group>"; };
-		02913FAB1C3A73BD001A5096 /* s1c2-fixed-xor */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "s1c2-fixed-xor"; sourceTree = BUILT_PRODUCTS_DIR; };
-		02913FAC1C3A747A001A5096 /* s1c2-fixed-xor.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = "s1c2-fixed-xor.c"; sourceTree = "<group>"; };
+		02913FAB1C3A73BD001A5096 /* s1c2-xor-fixed */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "s1c2-xor-fixed"; sourceTree = BUILT_PRODUCTS_DIR; };
+		02913FAC1C3A747A001A5096 /* s1c2-xor-fixed.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = "s1c2-xor-fixed.c"; sourceTree = "<group>"; };
 		02913FAE1C3A7769001A5096 /* bit_ops.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = bit_ops.c; path = Library/bit_ops.c; sourceTree = "<group>"; };
 		02913FAF1C3A7769001A5096 /* bit_ops.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = bit_ops.h; path = Library/bit_ops.h; sourceTree = "<group>"; };
-		02913FBD1C3A7ECC001A5096 /* s1c3-byte-xor-cipher */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "s1c3-byte-xor-cipher"; sourceTree = BUILT_PRODUCTS_DIR; };
-		02913FBE1C3A7F21001A5096 /* s1c3-byte-xor-cipher.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = "s1c3-byte-xor-cipher.c"; sourceTree = "<group>"; };
+		02913FBD1C3A7ECC001A5096 /* s1c3-xor-cipher */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "s1c3-xor-cipher"; sourceTree = BUILT_PRODUCTS_DIR; };
+		02913FBE1C3A7F21001A5096 /* s1c3-xor-cipher.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = "s1c3-xor-cipher.c"; sourceTree = "<group>"; };
 		02913FC01C3A885D001A5096 /* score.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = score.c; path = Library/score.c; sourceTree = "<group>"; };
 		02913FC11C3A885D001A5096 /* score.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = score.h; path = Library/score.h; sourceTree = "<group>"; };
+		02913FD21C3B29F2001A5096 /* s1c4-xor-cipher-detect */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "s1c4-xor-cipher-detect"; sourceTree = BUILT_PRODUCTS_DIR; };
+		02913FD31C3B2BAB001A5096 /* s1c4-xor-cipher-detect.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = "s1c4-xor-cipher-detect.c"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -75,6 +84,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		02913FCE1C3B29F2001A5096 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -91,8 +107,9 @@
 			isa = PBXGroup;
 			children = (
 				02913F851C3673E4001A5096 /* s1c1-hex-to-base64 */,
-				02913FAB1C3A73BD001A5096 /* s1c2-fixed-xor */,
-				02913FBD1C3A7ECC001A5096 /* s1c3-byte-xor-cipher */,
+				02913FAB1C3A73BD001A5096 /* s1c2-xor-fixed */,
+				02913FBD1C3A7ECC001A5096 /* s1c3-xor-cipher */,
+				02913FD21C3B29F2001A5096 /* s1c4-xor-cipher-detect */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -101,8 +118,9 @@
 			isa = PBXGroup;
 			children = (
 				02913F881C3673E4001A5096 /* s1c1-hex-to-base64.c */,
-				02913FAC1C3A747A001A5096 /* s1c2-fixed-xor.c */,
-				02913FBE1C3A7F21001A5096 /* s1c3-byte-xor-cipher.c */,
+				02913FAC1C3A747A001A5096 /* s1c2-xor-fixed.c */,
+				02913FBE1C3A7F21001A5096 /* s1c3-xor-cipher.c */,
+				02913FD31C3B2BAB001A5096 /* s1c4-xor-cipher-detect.c */,
 			);
 			path = Challenges;
 			sourceTree = "<group>";
@@ -147,9 +165,9 @@
 			productReference = 02913F851C3673E4001A5096 /* s1c1-hex-to-base64 */;
 			productType = "com.apple.product-type.tool";
 		};
-		02913F9F1C3A73BD001A5096 /* s1c2-fixed-xor */ = {
+		02913F9F1C3A73BD001A5096 /* s1c2-xor-fixed */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 02913FA81C3A73BD001A5096 /* Build configuration list for PBXNativeTarget "s1c2-fixed-xor" */;
+			buildConfigurationList = 02913FA81C3A73BD001A5096 /* Build configuration list for PBXNativeTarget "s1c2-xor-fixed" */;
 			buildPhases = (
 				02913FA01C3A73BD001A5096 /* Sources */,
 				02913FA71C3A73BD001A5096 /* Frameworks */,
@@ -158,14 +176,14 @@
 			);
 			dependencies = (
 			);
-			name = "s1c2-fixed-xor";
+			name = "s1c2-xor-fixed";
 			productName = MatasanoCrypto;
-			productReference = 02913FAB1C3A73BD001A5096 /* s1c2-fixed-xor */;
+			productReference = 02913FAB1C3A73BD001A5096 /* s1c2-xor-fixed */;
 			productType = "com.apple.product-type.tool";
 		};
-		02913FB11C3A7ECC001A5096 /* s1c3-byte-xor-cipher */ = {
+		02913FB11C3A7ECC001A5096 /* s1c3-xor-cipher */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 02913FBA1C3A7ECC001A5096 /* Build configuration list for PBXNativeTarget "s1c3-byte-xor-cipher" */;
+			buildConfigurationList = 02913FBA1C3A7ECC001A5096 /* Build configuration list for PBXNativeTarget "s1c3-xor-cipher" */;
 			buildPhases = (
 				02913FB21C3A7ECC001A5096 /* Sources */,
 				02913FB91C3A7ECC001A5096 /* Frameworks */,
@@ -174,9 +192,25 @@
 			);
 			dependencies = (
 			);
-			name = "s1c3-byte-xor-cipher";
+			name = "s1c3-xor-cipher";
 			productName = MatasanoCrypto;
-			productReference = 02913FBD1C3A7ECC001A5096 /* s1c3-byte-xor-cipher */;
+			productReference = 02913FBD1C3A7ECC001A5096 /* s1c3-xor-cipher */;
+			productType = "com.apple.product-type.tool";
+		};
+		02913FC51C3B29F2001A5096 /* s1c4-xor-cipher-detect */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 02913FCF1C3B29F2001A5096 /* Build configuration list for PBXNativeTarget "s1c4-xor-cipher-detect" */;
+			buildPhases = (
+				02913FC61C3B29F2001A5096 /* Sources */,
+				02913FCE1C3B29F2001A5096 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "s1c4-xor-cipher-detect";
+			productName = MatasanoCrypto;
+			productReference = 02913FD21C3B29F2001A5096 /* s1c4-xor-cipher-detect */;
 			productType = "com.apple.product-type.tool";
 		};
 /* End PBXNativeTarget section */
@@ -206,8 +240,9 @@
 			projectRoot = "";
 			targets = (
 				02913F841C3673E4001A5096 /* s1c1-hex-to-base64 */,
-				02913F9F1C3A73BD001A5096 /* s1c2-fixed-xor */,
-				02913FB11C3A7ECC001A5096 /* s1c3-byte-xor-cipher */,
+				02913F9F1C3A73BD001A5096 /* s1c2-xor-fixed */,
+				02913FB11C3A7ECC001A5096 /* s1c3-xor-cipher */,
+				02913FC51C3B29F2001A5096 /* s1c4-xor-cipher-detect */,
 			);
 		};
 /* End PBXProject section */
@@ -235,7 +270,7 @@
 				02913FA21C3A73BD001A5096 /* char.c in Sources */,
 				02913FA31C3A73BD001A5096 /* calc.c in Sources */,
 				02913FB01C3A7769001A5096 /* bit_ops.c in Sources */,
-				02913FAD1C3A747A001A5096 /* s1c2-fixed-xor.c in Sources */,
+				02913FAD1C3A747A001A5096 /* s1c2-xor-fixed.c in Sources */,
 				02913FA41C3A73BD001A5096 /* bytearray.c in Sources */,
 				02913FA61C3A73BD001A5096 /* hex.c in Sources */,
 			);
@@ -248,10 +283,24 @@
 				02913FC21C3A885D001A5096 /* score.c in Sources */,
 				02913FB31C3A7ECC001A5096 /* char.c in Sources */,
 				02913FB41C3A7ECC001A5096 /* calc.c in Sources */,
-				02913FBF1C3A7F21001A5096 /* s1c3-byte-xor-cipher.c in Sources */,
+				02913FBF1C3A7F21001A5096 /* s1c3-xor-cipher.c in Sources */,
 				02913FB51C3A7ECC001A5096 /* bit_ops.c in Sources */,
 				02913FB71C3A7ECC001A5096 /* bytearray.c in Sources */,
 				02913FB81C3A7ECC001A5096 /* hex.c in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		02913FC61C3B29F2001A5096 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				02913FC71C3B29F2001A5096 /* score.c in Sources */,
+				02913FD41C3B2BAB001A5096 /* s1c4-xor-cipher-detect.c in Sources */,
+				02913FC81C3B29F2001A5096 /* char.c in Sources */,
+				02913FC91C3B29F2001A5096 /* calc.c in Sources */,
+				02913FCB1C3B29F2001A5096 /* bit_ops.c in Sources */,
+				02913FCC1C3B29F2001A5096 /* bytearray.c in Sources */,
+				02913FCD1C3B29F2001A5096 /* hex.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -438,6 +487,20 @@
 			};
 			name = Release;
 		};
+		02913FD01C3B29F2001A5096 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		02913FD11C3B29F2001A5096 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -459,7 +522,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		02913FA81C3A73BD001A5096 /* Build configuration list for PBXNativeTarget "s1c2-fixed-xor" */ = {
+		02913FA81C3A73BD001A5096 /* Build configuration list for PBXNativeTarget "s1c2-xor-fixed" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				02913FA91C3A73BD001A5096 /* Debug */,
@@ -468,11 +531,20 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		02913FBA1C3A7ECC001A5096 /* Build configuration list for PBXNativeTarget "s1c3-byte-xor-cipher" */ = {
+		02913FBA1C3A7ECC001A5096 /* Build configuration list for PBXNativeTarget "s1c3-xor-cipher" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				02913FBB1C3A7ECC001A5096 /* Debug */,
 				02913FBC1C3A7ECC001A5096 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		02913FCF1C3B29F2001A5096 /* Build configuration list for PBXNativeTarget "s1c4-xor-cipher-detect" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				02913FD01C3B29F2001A5096 /* Debug */,
+				02913FD11C3B29F2001A5096 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

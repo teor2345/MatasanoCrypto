@@ -15,8 +15,8 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "02913F9F1C3A73BD001A5096"
-               BuildableName = "s1c2-fixed-xor"
-               BlueprintName = "s1c2-fixed-xor"
+               BuildableName = "s1c2-xor-fixed"
+               BlueprintName = "s1c2-xor-fixed"
                ReferencedContainer = "container:MatasanoCrypto.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -33,8 +33,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "02913F9F1C3A73BD001A5096"
-            BuildableName = "s1c2-fixed-xor"
-            BlueprintName = "s1c2-fixed-xor"
+            BuildableName = "s1c2-xor-fixed"
+            BlueprintName = "s1c2-xor-fixed"
             ReferencedContainer = "container:MatasanoCrypto.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
@@ -56,8 +56,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "02913F9F1C3A73BD001A5096"
-            BuildableName = "s1c2-fixed-xor"
-            BlueprintName = "s1c2-fixed-xor"
+            BuildableName = "s1c2-xor-fixed"
+            BlueprintName = "s1c2-xor-fixed"
             ReferencedContainer = "container:MatasanoCrypto.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
@@ -75,8 +75,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "02913F9F1C3A73BD001A5096"
-            BuildableName = "s1c2-fixed-xor"
-            BlueprintName = "s1c2-fixed-xor"
+            BuildableName = "s1c2-xor-fixed"
+            BlueprintName = "s1c2-xor-fixed"
             ReferencedContainer = "container:MatasanoCrypto.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
