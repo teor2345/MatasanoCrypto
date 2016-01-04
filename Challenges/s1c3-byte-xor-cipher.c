@@ -52,6 +52,13 @@ const char *input_hexstr  = "1b37373331363f78151b7f2b783431333d78397828372d363c7
  * punctuation frequency of 28 characters.) */
 #define MAX_NONLETTER_COUNT(length) ((length)/(ENGLISH_PUNCTUATION_LENGTH/2))
 
+/* The maximum RMS variation from typical English letter frequencies.
+ * The score is independent of the length of the text.
+ * It's between 0 and 1, with good scores being around 0.045.
+ * We allow just slightly more than that, because most scores are around 0.05.
+ */
+#define MAX_ENGLISH_SCORE (0.049)
+
 /* Implementation */
 
 int
@@ -81,13 +88,25 @@ main(int argc, const char * argv[])
     size_t max_unprint = MAX_UNPRINTABLE_COUNT(output_bytearray->length);
     size_t max_nonletter = MAX_NONLETTER_COUNT(output_bytearray->length);
     size_t min_space = MIN_SPACE_COUNT(output_bytearray->length);
-    if (count_unprintable(output_bytearray) <= max_unprint
-        && count_nonletter(output_bytearray, 0) <= max_nonletter
-        && count_space(output_bytearray) >= min_space) {
+    double max_score = MAX_ENGLISH_SCORE;
+
+    size_t unprint = count_unprintable(output_bytearray);
+    size_t nonletter = count_nonletter(output_bytearray, 0);
+    size_t space = count_space(output_bytearray);
+    double score = score_english_letter_frequency(output_bytearray);
+    if (unprint <= max_unprint
+        && nonletter <= max_nonletter
+        && space >= min_space
+        && score <= max_score) {
       /* Bytes -> Hex */
       printf("\n");
 
       printf("XOR Byte:              %hhu %c 0x%hhx\n", byte, byte, byte);
+
+      printf("Unprintable:           %zu <= %zu\n", unprint, max_unprint);
+      printf("Non-Letter:            %zu <= %zu\n", nonletter, max_nonletter);
+      printf("Space (Word Length):   %zu >= %zu\n", space, min_space);
+      printf("English Text Score:    %.3f <= %.3f\n", score, max_score);
 
       char *output_hexstr = bytearray_to_hexstr(output_bytearray);
       printf("Hex XOR:               %s\n", output_hexstr);
