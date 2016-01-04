@@ -19,6 +19,12 @@
 		02913FA61C3A73BD001A5096 /* hex.c in Sources */ = {isa = PBXBuildFile; fileRef = 02913F991C37CD83001A5096 /* hex.c */; };
 		02913FAD1C3A747A001A5096 /* s1c2-fixed-xor.c in Sources */ = {isa = PBXBuildFile; fileRef = 02913FAC1C3A747A001A5096 /* s1c2-fixed-xor.c */; };
 		02913FB01C3A7769001A5096 /* bit_ops.c in Sources */ = {isa = PBXBuildFile; fileRef = 02913FAE1C3A7769001A5096 /* bit_ops.c */; };
+		02913FB31C3A7ECC001A5096 /* char.c in Sources */ = {isa = PBXBuildFile; fileRef = 02913F961C37CC10001A5096 /* char.c */; };
+		02913FB41C3A7ECC001A5096 /* calc.c in Sources */ = {isa = PBXBuildFile; fileRef = 02913F901C37C9C7001A5096 /* calc.c */; };
+		02913FB51C3A7ECC001A5096 /* bit_ops.c in Sources */ = {isa = PBXBuildFile; fileRef = 02913FAE1C3A7769001A5096 /* bit_ops.c */; };
+		02913FB71C3A7ECC001A5096 /* bytearray.c in Sources */ = {isa = PBXBuildFile; fileRef = 02913F931C37CA9C001A5096 /* bytearray.c */; };
+		02913FB81C3A7ECC001A5096 /* hex.c in Sources */ = {isa = PBXBuildFile; fileRef = 02913F991C37CD83001A5096 /* hex.c */; };
+		02913FBF1C3A7F21001A5096 /* s1c3-byte-xor-cipher.c in Sources */ = {isa = PBXBuildFile; fileRef = 02913FBE1C3A7F21001A5096 /* s1c3-byte-xor-cipher.c */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -38,6 +44,8 @@
 		02913FAC1C3A747A001A5096 /* s1c2-fixed-xor.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = "s1c2-fixed-xor.c"; sourceTree = "<group>"; };
 		02913FAE1C3A7769001A5096 /* bit_ops.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = bit_ops.c; path = Library/bit_ops.c; sourceTree = "<group>"; };
 		02913FAF1C3A7769001A5096 /* bit_ops.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = bit_ops.h; path = Library/bit_ops.h; sourceTree = "<group>"; };
+		02913FBD1C3A7ECC001A5096 /* s1c3-byte-xor-cipher */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "s1c3-byte-xor-cipher"; sourceTree = BUILT_PRODUCTS_DIR; };
+		02913FBE1C3A7F21001A5096 /* s1c3-byte-xor-cipher.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = "s1c3-byte-xor-cipher.c"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -49,6 +57,13 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		02913FA71C3A73BD001A5096 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		02913FB91C3A7ECC001A5096 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -72,6 +87,7 @@
 			children = (
 				02913F851C3673E4001A5096 /* s1c1-hex-to-base64 */,
 				02913FAB1C3A73BD001A5096 /* s1c2-fixed-xor */,
+				02913FBD1C3A7ECC001A5096 /* s1c3-byte-xor-cipher */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -81,6 +97,7 @@
 			children = (
 				02913F881C3673E4001A5096 /* s1c1-hex-to-base64.c */,
 				02913FAC1C3A747A001A5096 /* s1c2-fixed-xor.c */,
+				02913FBE1C3A7F21001A5096 /* s1c3-byte-xor-cipher.c */,
 			);
 			path = Challenges;
 			sourceTree = "<group>";
@@ -139,6 +156,22 @@
 			productReference = 02913FAB1C3A73BD001A5096 /* s1c2-fixed-xor */;
 			productType = "com.apple.product-type.tool";
 		};
+		02913FB11C3A7ECC001A5096 /* s1c3-byte-xor-cipher */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 02913FBA1C3A7ECC001A5096 /* Build configuration list for PBXNativeTarget "s1c3-byte-xor-cipher" */;
+			buildPhases = (
+				02913FB21C3A7ECC001A5096 /* Sources */,
+				02913FB91C3A7ECC001A5096 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "s1c3-byte-xor-cipher";
+			productName = MatasanoCrypto;
+			productReference = 02913FBD1C3A7ECC001A5096 /* s1c3-byte-xor-cipher */;
+			productType = "com.apple.product-type.tool";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -167,6 +200,7 @@
 			targets = (
 				02913F841C3673E4001A5096 /* s1c1-hex-to-base64 */,
 				02913F9F1C3A73BD001A5096 /* s1c2-fixed-xor */,
+				02913FB11C3A7ECC001A5096 /* s1c3-byte-xor-cipher */,
 			);
 		};
 /* End PBXProject section */
@@ -195,6 +229,19 @@
 				02913FAD1C3A747A001A5096 /* s1c2-fixed-xor.c in Sources */,
 				02913FA41C3A73BD001A5096 /* bytearray.c in Sources */,
 				02913FA61C3A73BD001A5096 /* hex.c in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		02913FB21C3A7ECC001A5096 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				02913FB31C3A7ECC001A5096 /* char.c in Sources */,
+				02913FB41C3A7ECC001A5096 /* calc.c in Sources */,
+				02913FBF1C3A7F21001A5096 /* s1c3-byte-xor-cipher.c in Sources */,
+				02913FB51C3A7ECC001A5096 /* bit_ops.c in Sources */,
+				02913FB71C3A7ECC001A5096 /* bytearray.c in Sources */,
+				02913FB81C3A7ECC001A5096 /* hex.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -365,6 +412,20 @@
 			};
 			name = Release;
 		};
+		02913FBB1C3A7ECC001A5096 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		02913FBC1C3A7ECC001A5096 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -391,6 +452,15 @@
 			buildConfigurations = (
 				02913FA91C3A73BD001A5096 /* Debug */,
 				02913FAA1C3A73BD001A5096 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		02913FBA1C3A7ECC001A5096 /* Build configuration list for PBXNativeTarget "s1c3-byte-xor-cipher" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				02913FBB1C3A7ECC001A5096 /* Debug */,
+				02913FBC1C3A7ECC001A5096 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

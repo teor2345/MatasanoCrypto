@@ -14,6 +14,11 @@
 			<key>orderHint</key>
 			<integer>1</integer>
 		</dict>
+		<key>s1c3-byte-xor-cipher.xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>2</integer>
+		</dict>
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
@@ -23,6 +28,11 @@
 			<true/>
 		</dict>
 		<key>02913F9F1C3A73BD001A5096</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>02913FB11C3A7ECC001A5096</key>
 		<dict>
 			<key>primary</key>
 			<true/>
