@@ -17,11 +17,22 @@
 typedef struct bytearray_t bytearray_t;
 
 bool is_byte_ascii_printable(uint8_t byte);
-/* Uses hexadecimal conversion internally */
+bool is_byte_ascii_letter(uint8_t byte);
+bool is_byte_ascii_space(uint8_t byte);
+
 char *bytearray_to_asciistr(const bytearray_t *bytearray);
 
 size_t count_printable(const bytearray_t *bytearray);
 /* Return the number of unprintable ASCII characters in bytearray. */
 #define count_unprintable(b) ((b)->length - count_printable(b))
+
+size_t count_space(const bytearray_t *bytearray);
+/* Return the number of non-space ASCII characters in bytearray. */
+#define count_nonspace(b) ((b)->length - count_space(b))
+
+size_t count_letter(const bytearray_t *bytearray, bool count_space);
+/* Return the number of non-letter ASCII characters in bytearray. */
+#define count_nonletter(b, count_space) \
+                               ((b)->length - count_letter(b, !(count_space)))
 
 #endif /* score_h */

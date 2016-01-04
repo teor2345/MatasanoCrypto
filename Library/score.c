@@ -28,6 +28,22 @@ is_byte_ascii_printable(uint8_t byte)
   return byte >= ' ' && byte <= '~';
 }
 
+/* Is byte an ASCII letter character?
+ * Case-insensitive. */
+bool
+is_byte_ascii_letter(uint8_t byte)
+{
+  return ((byte >= 'A' && byte <= 'Z')
+          || (byte >= 'a' && byte <= 'z'));
+}
+
+/* Is byte an ASCII space character? */
+bool
+is_byte_ascii_space(uint8_t byte)
+{
+  return byte == ' ';
+}
+
 /* Convert the byte array bytearray into a newly allocated ASCII
  * nul-terminated string, escaping non-printable characters using "\xHH".
  * Never returns a NULL char *. If bytearray has a zero length, the returned
@@ -84,9 +100,11 @@ bytearray_to_asciistr(const bytearray_t *bytearray)
   return asciistr;
 }
 
-/* Return the number of printable ASCII characters in bytearray. */
-size_t
-count_printable(const bytearray_t *bytearray)
+typedef bool (*byte_test_func)(uint8_t);
+
+/* Return the number of bytes in bytearray satisfying byte_test. */
+static size_t
+count_byte_test(const bytearray_t *bytearray, byte_test_func byte_test)
 {
   assert(bytearray != NULL);
   assert(is_bytearray_consistent(bytearray));
@@ -95,10 +113,40 @@ count_printable(const bytearray_t *bytearray)
 
   for (size_t i = 0; i < bytearray->length; i++) {
     uint8_t byte = bytearray_get_checked(bytearray, i);
-    
-    if (is_byte_ascii_printable(byte)) {
+
+    if (byte_test(byte)) {
       result++;
     }
+  }
+
+  assert(result <= bytearray->length);
+
+  return result;
+}
+
+/* Return the number of printable ASCII characters in bytearray. */
+size_t
+count_printable(const bytearray_t *bytearray)
+{
+  return count_byte_test(bytearray, &is_byte_ascii_printable);
+}
+
+/* Return the number of ASCII space characters in bytearray. */
+size_t
+count_space(const bytearray_t *bytearray)
+{
+  return count_byte_test(bytearray, &is_byte_ascii_space);
+}
+
+/* Return the number of ASCII letter characters in bytearray.
+ * Case-insensitive. Inclues spaces if count_space is true. */
+size_t
+count_letter(const bytearray_t *bytearray, bool count_space)
+{
+  size_t result = count_byte_test(bytearray, &is_byte_ascii_letter);
+
+  if (count_space) {
+    result += count_byte_test(bytearray, &is_byte_ascii_space);
   }
 
   assert(result <= bytearray->length);
