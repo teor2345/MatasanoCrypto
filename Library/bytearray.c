@@ -75,6 +75,28 @@ bytearray_free_(bytearray_t *bytearray)
   free(bytearray);
 }
 
+/* Return a new bytearray that has the same length and content as src.
+ * Must be freed using bytearray_free(). */
+bytearray_t *
+bytearray_dup(const bytearray_t *src)
+{
+  assert(src != NULL);
+  assert(is_bytearray_consistent(src));
+
+  bytearray_t * const result = bytearray_alloc(src->length);
+  assert(result != NULL);
+  assert(is_bytearray_consistent(result));
+  assert(result->length == src->length);
+
+  for (size_t i = 0; i < result->length; i++) {
+    uint8_t byte = bytearray_get_checked(src, i);
+    bytearray_set_checked(result, i, byte);
+  }
+
+  assert(is_bytearray_consistent(result));
+  return result;
+}
+
 /* Set bytearray->bytes[index] to byte, checking that bytearray is valid and
  * index is within the bytearray's length. */
 void
