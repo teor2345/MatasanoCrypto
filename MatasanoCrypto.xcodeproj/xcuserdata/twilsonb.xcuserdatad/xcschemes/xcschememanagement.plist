@@ -9,17 +9,12 @@
 			<key>orderHint</key>
 			<integer>0</integer>
 		</dict>
-		<key>s1c2-fixed-xor.xcscheme</key>
+		<key>s1c2-xor-fixed.xcscheme</key>
 		<dict>
 			<key>orderHint</key>
 			<integer>1</integer>
 		</dict>
-		<key>s1c3-byte-xor-cipher copy.xcscheme</key>
-		<dict>
-			<key>orderHint</key>
-			<integer>3</integer>
-		</dict>
-		<key>s1c3-byte-xor-cipher.xcscheme</key>
+		<key>s1c3-xor-cipher.xcscheme</key>
 		<dict>
 			<key>orderHint</key>
 			<integer>2</integer>
