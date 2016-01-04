@@ -35,4 +35,11 @@ size_t count_letter(const bytearray_t *bytearray, bool count_space);
 #define count_nonletter(b, count_space) \
                                ((b)->length - count_letter(b, !(count_space)))
 
+size_t count_byte(const bytearray_t *bytearray, uint8_t byte);
+/* Return the number of non-matching bytes in bytearray. */
+#define count_nonbyte(b, byte) \
+                               ((b)->length - count_byte(b, byte))
+
+double score_english_letter_frequency(const bytearray_t *bytearray);
+
 #endif /* score_h */

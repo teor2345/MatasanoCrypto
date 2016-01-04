@@ -10,6 +10,7 @@
 #include "score.h"
 
 #include <assert.h>
+#include <math.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -152,4 +153,128 @@ count_letter(const bytearray_t *bytearray, bool count_space)
   assert(result <= bytearray->length);
 
   return result;
+}
+
+/* Return the number of bytes matching byte in bytearray. */
+size_t
+count_byte(const bytearray_t *bytearray, uint8_t byte)
+{
+  /* I'd love to use count_byte_test, but C doesn't have partially-applied
+   * functions */
+  assert(bytearray != NULL);
+  assert(is_bytearray_consistent(bytearray));
+
+  size_t result = 0;
+
+  for (size_t i = 0; i < bytearray->length; i++) {
+    uint8_t ba_byte = bytearray_get_checked(bytearray, i);
+
+    if (byte == ba_byte) {
+      result++;
+    }
+  }
+
+  assert(result <= bytearray->length);
+
+  return result;
+}
+
+#define LETTER_COUNT 26
+
+/* Calculate the frequencies of each letter in bytearray and place them in
+ * frequencies_out.
+ * Case-insensitive.
+ * Disregards non-letter characters when calculating frequencies. */
+static void
+calculate_letter_frequency(const bytearray_t *bytearray,
+                                   double frequencies_out[LETTER_COUNT])
+{
+  assert(bytearray != NULL);
+  assert(is_bytearray_consistent(bytearray));
+
+  size_t letter_count[LETTER_COUNT];
+  size_t total_letter_count = count_letter(bytearray, 0);
+
+  for (uint8_t i = 0; i < LETTER_COUNT; i++) {
+    /* I'd love to use count_byte_test with a case-insensitive letter-matching
+     * function, but C doesn't have partially-applied functions */
+    char letter = 0;
+    bool success = false;
+
+    /* Initialise with lowercase count */
+    success = value_to_char(i, 0, LETTER_COUNT - 1, 'a', &letter);
+    assert(success);
+    letter_count[i] = count_byte(bytearray, (uint8_t)letter);
+
+    /* Add uppercase count */
+    success = value_to_char(i, 0, LETTER_COUNT - 1, 'A', &letter);
+    assert(success);
+    letter_count[i] += count_byte(bytearray, (uint8_t)letter);
+
+    /* Calculate frequency */
+    if (total_letter_count > 0) {
+      frequencies_out[i] = (double)letter_count[i]/(double)total_letter_count;
+    } else {
+      frequencies_out[i] = 0.0;
+    }
+  }
+}
+
+/* The average frequencies of the letters a-z in English.
+ * https://en.wikipedia.org/wiki/Letter_frequency */
+static double english_letter_frequency[LETTER_COUNT] = {
+  /* a */ 0.08167,
+  /* b */ 0.01492,
+  /* c */ 0.02782,
+  /* d */ 0.04253,
+  /* e */ 0.12702,
+  /* f */ 0.02228,
+  /* g */ 0.02015,
+  /* h */ 0.06094,
+  /* i */ 0.06966,
+  /* j */ 0.00153,
+  /* k */ 0.00772,
+  /* l */ 0.04025,
+  /* m */ 0.02406,
+  /* n */ 0.06749,
+  /* o */ 0.07507,
+  /* p */ 0.01929,
+  /* q */ 0.00095,
+  /* r */ 0.05987,
+  /* s */ 0.06327,
+  /* t */ 0.09056,
+  /* u */ 0.02758,
+  /* v */ 0.00978,
+  /* w */ 0.02361,
+  /* x */ 0.00150,
+  /* y */ 0.01974,
+  /* z */ 0.00074
+};
+
+/* Calculate the frequencies of each letter in bytearray and scores them
+ * against typical English text frequencies. Lower values are better.
+ * Case-insensitive.
+ * Disregards non-letter characters when calculating frequencies. */
+double
+score_english_letter_frequency(const bytearray_t *bytearray)
+{
+  assert(bytearray != NULL);
+  assert(is_bytearray_consistent(bytearray));
+
+  double letter_frequency[LETTER_COUNT];
+  calculate_letter_frequency(bytearray, letter_frequency);
+
+  /* Calculate root-mean-squares using the differences between each letter's
+   * actual frequency, and the average English frequency.
+   * TODO: is there a better statistical function for this? */
+  double sum_of_squares = 0.0;
+  for (uint8_t i = 0; i < LETTER_COUNT; i++) {
+    double difference = letter_frequency[i] - english_letter_frequency[i];
+    sum_of_squares += difference*difference;
+  }
+
+  double root_mean_squares = sqrt(sum_of_squares/LETTER_COUNT);
+
+  assert(root_mean_squares >= 0.0);
+  return root_mean_squares;
 }
