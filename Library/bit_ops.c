@@ -68,6 +68,8 @@ bytearray_xor_byte(const bytearray_t *bytearray, uint8_t byte)
    * from bytearray_xor. */
 
   bytearray_t *b_byte = bytearray_alloc(sizeof(byte));
+  bytearray_set_checked(b_byte, 0, byte);
+
   bytearray_t * const result = bytearray_xor(bytearray, b_byte);
 
   bytearray_free(b_byte);
