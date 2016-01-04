@@ -15,6 +15,7 @@
 #include "bit_ops.h"
 #include "bytearray.h"
 #include "hex.h"
+#include "score.h"
 
 /* Challenge-Specific Constants */
 
@@ -44,23 +45,29 @@ main(int argc, const char * argv[])
   do {
     bytearray_t *output_bytearray = bytearray_xor_byte(input_bytearray, byte);
 
-    /* Bytes -> Hex */
-    printf("\n");
+    /* avoid printing candiates decryptions that contain unprintable
+     * characters */
+    if (count_unprintable(output_bytearray) == 0) {
+      /* Bytes -> Hex */
+      printf("\n");
 
-    printf("XOR Byte:              %hhu %c 0x%hhx\n", byte, byte, byte);
+      printf("XOR Byte:              %hhu %c 0x%hhx\n", byte, byte, byte);
 
-    char *output_hexstr = bytearray_to_hexstr(output_bytearray);
-    printf("Hex XOR:               %s\n", output_hexstr);
+      char *output_hexstr = bytearray_to_hexstr(output_bytearray);
+      printf("Hex XOR:               %s\n", output_hexstr);
 
-    printf("Bytes XOR:             %s\n", (char *)output_bytearray->bytes);
+      printf("Bytes XOR:             %s\n", (char *)output_bytearray->bytes);
 
-    char *output_asciistr = bytearray_to_asciistr(output_bytearray);
-    printf("Escaped Bytes XOR:     %s\n", output_asciistr);
+      char *output_asciistr = bytearray_to_asciistr(output_bytearray);
+      printf("Escaped Bytes XOR:     %s\n", output_asciistr);
+
+      /* Cleanup conditional loop allocations */
+      free(output_hexstr);
+      free(output_asciistr);
+    }
 
     /* Cleanup loop allocations */
     bytearray_free(output_bytearray);
-    free(output_hexstr);
-    free(output_asciistr);
 
     byte++;
 

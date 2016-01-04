@@ -25,6 +25,7 @@
 		02913FB71C3A7ECC001A5096 /* bytearray.c in Sources */ = {isa = PBXBuildFile; fileRef = 02913F931C37CA9C001A5096 /* bytearray.c */; };
 		02913FB81C3A7ECC001A5096 /* hex.c in Sources */ = {isa = PBXBuildFile; fileRef = 02913F991C37CD83001A5096 /* hex.c */; };
 		02913FBF1C3A7F21001A5096 /* s1c3-byte-xor-cipher.c in Sources */ = {isa = PBXBuildFile; fileRef = 02913FBE1C3A7F21001A5096 /* s1c3-byte-xor-cipher.c */; };
+		02913FC21C3A885D001A5096 /* score.c in Sources */ = {isa = PBXBuildFile; fileRef = 02913FC01C3A885D001A5096 /* score.c */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -46,6 +47,8 @@
 		02913FAF1C3A7769001A5096 /* bit_ops.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = bit_ops.h; path = Library/bit_ops.h; sourceTree = "<group>"; };
 		02913FBD1C3A7ECC001A5096 /* s1c3-byte-xor-cipher */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "s1c3-byte-xor-cipher"; sourceTree = BUILT_PRODUCTS_DIR; };
 		02913FBE1C3A7F21001A5096 /* s1c3-byte-xor-cipher.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = "s1c3-byte-xor-cipher.c"; sourceTree = "<group>"; };
+		02913FC01C3A885D001A5096 /* score.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = score.c; path = Library/score.c; sourceTree = "<group>"; };
+		02913FC11C3A885D001A5096 /* score.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = score.h; path = Library/score.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -117,6 +120,8 @@
 				02913F971C37CC10001A5096 /* char.h */,
 				02913F991C37CD83001A5096 /* hex.c */,
 				02913F9A1C37CD83001A5096 /* hex.h */,
+				02913FC01C3A885D001A5096 /* score.c */,
+				02913FC11C3A885D001A5096 /* score.h */,
 			);
 			name = Library;
 			sourceTree = "<group>";
@@ -236,6 +241,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				02913FC21C3A885D001A5096 /* score.c in Sources */,
 				02913FB31C3A7ECC001A5096 /* char.c in Sources */,
 				02913FB41C3A7ECC001A5096 /* calc.c in Sources */,
 				02913FBF1C3A7F21001A5096 /* s1c3-byte-xor-cipher.c in Sources */,
