@@ -217,6 +217,7 @@ calculate_letter_frequency(const bytearray_t *bytearray,
     } else {
       frequencies_out[i] = 0.0;
     }
+    assert(frequencies_out[i] >= 0.0);
   }
 }
 
@@ -270,7 +271,9 @@ score_english_letter_frequency(const bytearray_t *bytearray)
   double sum_of_squares = 0.0;
   for (uint8_t i = 0; i < LETTER_COUNT; i++) {
     double difference = letter_frequency[i] - english_letter_frequency[i];
+    assert(isfinite(difference));
     sum_of_squares += difference*difference;
+    assert(sum_of_squares >= 0.0);
   }
 
   double root_mean_squares = sqrt(sum_of_squares/LETTER_COUNT);
