@@ -72,7 +72,7 @@ main(int argc, const char * argv[])
   printf("Hex:                 %s\n", input_hexstr);
 
   bytearray_t *input_bytearray = hexstr_to_bytearray(input_hexstr);
-  printf("Bytes:               %s\n", (char *)input_bytearray->bytes);
+  /*printf("Bytes:               %s\n", (char *)input_bytearray->bytes);*/
 
   char *input_asciistr = bytearray_to_asciistr(input_bytearray);
   printf("Escaped Bytes:       %s\n", input_asciistr);
@@ -111,7 +111,8 @@ main(int argc, const char * argv[])
       char *output_hexstr = bytearray_to_hexstr(output_bytearray);
       printf("Hex XOR:               %s\n", output_hexstr);
 
-      printf("Bytes XOR:             %s\n", (char *)output_bytearray->bytes);
+      /*printf("Bytes XOR:             %s\n", (char *)output_bytearray->bytes);
+       */
 
       char *output_asciistr = bytearray_to_asciistr(output_bytearray);
       printf("Escaped Bytes XOR:     %s\n", output_asciistr);

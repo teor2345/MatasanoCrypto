@@ -36,7 +36,7 @@ main(int argc, const char * argv[])
   printf("Hex:                 %s\n", input_hexstr);
 
   bytearray_t *input_bytearray = hexstr_to_bytearray(input_hexstr);
-  printf("Bytes:               %s\n", (char *)input_bytearray->bytes);
+  /*printf("Bytes:               %s\n", (char *)input_bytearray->bytes);*/
 
   char *input_asciistr = bytearray_to_asciistr(input_bytearray);
   printf("Escaped Bytes:       %s\n", input_asciistr);
@@ -54,7 +54,7 @@ main(int argc, const char * argv[])
 
   /* Base64 -> Bytes -> Hex */
   bytearray_t *expected_bytearray = base64str_to_bytearray(expected_base64str);
-  printf("Bytes Expected:      %s\n", (char *)expected_bytearray->bytes);
+  /*printf("Bytes Expected:      %s\n", (char *)expected_bytearray->bytes);*/
 
   char *expected_asciistr = bytearray_to_asciistr(expected_bytearray);
   printf("Escaped Expected:    %s\n", expected_asciistr);
