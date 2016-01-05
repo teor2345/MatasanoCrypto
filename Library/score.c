@@ -26,7 +26,8 @@
 bool
 is_byte_ascii_printable(uint8_t byte)
 {
-  return byte >= ' ' && byte <= '~';
+  char c = (char)byte;
+  return c >= ' ' && c <= '~';
 }
 
 /* Is byte an ASCII letter character?
@@ -34,15 +35,16 @@ is_byte_ascii_printable(uint8_t byte)
 bool
 is_byte_ascii_letter(uint8_t byte)
 {
-  return ((byte >= 'A' && byte <= 'Z')
-          || (byte >= 'a' && byte <= 'z'));
+  char c = (char)byte;
+  return ((c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z'));
 }
 
 /* Is byte an ASCII space character? */
 bool
 is_byte_ascii_space(uint8_t byte)
 {
-  return byte == ' ';
+  char c = (char)byte;
+  return c == ' ';
 }
 
 /* Convert the byte array bytearray into a newly allocated ASCII
@@ -109,6 +111,7 @@ count_byte_test(const bytearray_t *bytearray, byte_test_func byte_test)
 {
   assert(bytearray != NULL);
   assert(is_bytearray_consistent(bytearray));
+  assert(byte_test != NULL);
 
   size_t result = 0;
 
@@ -142,12 +145,12 @@ count_space(const bytearray_t *bytearray)
 /* Return the number of ASCII letter characters in bytearray.
  * Case-insensitive. Inclues spaces if count_space is true. */
 size_t
-count_letter(const bytearray_t *bytearray, bool count_space)
+count_letter(const bytearray_t *bytearray, bool include_space)
 {
   size_t result = count_byte_test(bytearray, &is_byte_ascii_letter);
 
-  if (count_space) {
-    result += count_byte_test(bytearray, &is_byte_ascii_space);
+  if (include_space) {
+    result += count_space(bytearray);
   }
 
   assert(result <= bytearray->length);
@@ -193,7 +196,7 @@ calculate_letter_frequency(const bytearray_t *bytearray,
   assert(is_bytearray_consistent(bytearray));
 
   size_t letter_count[LETTER_COUNT];
-  size_t total_letter_count = count_letter(bytearray, 0);
+  size_t total_letter_count = count_letter(bytearray, false);
 
   for (uint8_t i = 0; i < LETTER_COUNT; i++) {
     /* I'd love to use count_byte_test with a case-insensitive letter-matching

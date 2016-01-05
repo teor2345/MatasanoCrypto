@@ -30,10 +30,10 @@ size_t count_space(const bytearray_t *bytearray);
 /* Return the number of non-space ASCII characters in bytearray. */
 #define count_nonspace(b) ((b)->length - count_space(b))
 
-size_t count_letter(const bytearray_t *bytearray, bool count_space);
+size_t count_letter(const bytearray_t *bytearray, bool include_space);
 /* Return the number of non-letter ASCII characters in bytearray. */
-#define count_nonletter(b, count_space) \
-                               ((b)->length - count_letter(b, !(count_space)))
+#define count_nonletter(b, include_space) \
+                            ((b)->length - count_letter(b, !(include_space)))
 
 size_t count_byte(const bytearray_t *bytearray, uint8_t byte);
 /* Return the number of non-matching bytes in bytearray. */
