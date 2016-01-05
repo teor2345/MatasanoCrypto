@@ -10,9 +10,14 @@
 #include "score.h"
 
 #include <assert.h>
+#include <float.h>
 #include <math.h>
 #include <stdlib.h>
 #include <string.h>
+
+#if SCORE_DEBUG
+#include <stdio.h>
+#endif
 
 #include "bytearray.h"
 #include "char.h"
@@ -255,6 +260,18 @@ static double english_letter_frequency[LETTER_COUNT] = {
   /* z */ 0.00074
 };
 
+/* Score the actual frequency against the expected frequency by returning
+ * a positive value that increases as actual deviates more from expected. */
+static double
+score_letter_frequency(double actual, double expected)
+{
+  assert(actual >= 0.0);
+  assert(expected >= 0.0);
+
+  /* Use the absolute value of the difference */
+  return fabs(actual - expected);
+}
+
 /* Calculate the frequencies of each letter in bytearray and scores them
  * against typical English text frequencies. Lower values are better.
  * Case-insensitive.
@@ -273,9 +290,11 @@ score_english_letter_frequency(const bytearray_t *bytearray)
    * TODO: is there a better statistical function for this? */
   double sum_of_squares = 0.0;
   for (uint8_t i = 0; i < LETTER_COUNT; i++) {
-    double difference = letter_frequency[i] - english_letter_frequency[i];
-    assert(isfinite(difference));
-    sum_of_squares += difference*difference;
+    double score = score_letter_frequency(letter_frequency[i],
+                                          english_letter_frequency[i]);
+    assert(score >= 0.0);
+    assert(score <= 1.0);
+    sum_of_squares += score*score;
     assert(sum_of_squares >= 0.0);
   }
 
@@ -283,4 +302,149 @@ score_english_letter_frequency(const bytearray_t *bytearray)
 
   assert(root_mean_squares >= 0.0);
   return root_mean_squares;
+}
+
+/* Scoring Heuristics */
+
+/* My estimate of the average English line length is 40 characters */
+#define ENGLISH_LINE_LENGTH 40
+
+/* The average English word length is 5
+ * (The frequency of English spaces is 1 in 6 characters)
+ * http://www.quora.com/Whats-the-average-length-of-English-words */
+#define ENGLISH_WORD_LENGTH 5
+#define ENGLISH_SPACE_LENGTH (ENGLISH_WORD_LENGTH+1)
+
+/* The average number of letters between punctuation in English text
+ * The frequency of English punctuation is 208.7 per 1000 words
+ * https://en.wikipedia.org/wiki/Punctuation_of_English#Frequency */
+#define ENGLISH_PUNCTUATION_LENGTH ((ENGLISH_SPACE_LENGTH*1000)/209)
+
+/* Allow for a few unprintable characters, like tabs or newlines.
+ * This allows for CRLF-terminated lines 20 characters long.
+ * (This is double my estimate of English line length, and a quarter of
+ * typical terminal widths.) */
+#define MAX_UNPRINTABLE(length) ((length)/(ENGLISH_LINE_LENGTH/4))
+
+/* Non-letters include punctuation but exclude spaces. This allows for
+ * punctuation every 4 characters. (This is seven times the typical English
+ * punctuation frequency of 28 characters.) */
+#define MAX_NONLETTER(length) ((length)/(ENGLISH_PUNCTUATION_LENGTH/7))
+
+/* Check we actually have words, and not just blocks of text or lots of
+ * whitespace. */
+#define EXPECTED_SPACE_FREQUENCY (1.0/ENGLISH_SPACE_LENGTH)
+
+/* The maximum RMS variation from the typical English space frequency.
+ * The score is independent of the length of the text.
+ * It's between 0 and 1, with good scores being around 0.01,
+ * potential sentences starting around 0.08,
+ * and the largest scores being around 0.167.
+ */
+#define GOOD_SPACE_DEVIATION (0.008)
+#define MAX_SPACE_DEVIATION (0.08)
+
+/* The maximum RMS variation from typical English letter frequencies.
+ * The score is independent of the length of the text.
+ * It's between 0 and 1, with good scores being around 0.0045,
+ * potential English starting around 0.055,
+ * and the largest scores being around 0.202.
+ */
+#define GOOD_ENGLISH_DEVIATION (0.04)
+#define MAX_ENGLISH_DEVIATION (0.055)
+
+/* If deviation is less than or equal to good_deviation, return zero.
+ * Otherwise, reduce deviation by good_deviation. */
+static double
+scale_good_deviation(double deviation, double good_deviation)
+{
+  if (deviation <= good_deviation) {
+    return 0.0;
+  } else {
+    return deviation - good_deviation;
+  }
+}
+
+/* Score deviation: lower values are better; exceeding max_deviation scores
+ * zero.
+ * Returns a value between 0.0 and 1.0, larger values are better scores.
+ * Returns 0.0 when deviation is greater than max_deviation.
+ * Returns 1.0 when deviation is zero, including when max_deviation is also
+ * zero. */
+static double
+score_max_deviation(double deviation, double max_deviation)
+{
+  assert(deviation >= 0.0);
+  assert(max_deviation >= 0.0);
+  if (deviation > max_deviation) {
+    return 0.0;
+  } else if (deviation <= DBL_EPSILON && max_deviation <= DBL_EPSILON) {
+    return 1.0;
+  } else {
+    double result = (max_deviation - deviation)/max_deviation;
+    assert(isfinite(result));
+    assert(result >= 0.0);
+    assert(result <= 1.0);
+    return result;
+  }
+}
+
+/* Like score_max_deviation, but with size_t inputs. */
+static double
+score_max_count(size_t count, size_t max_count)
+{
+  return score_max_deviation((double)count, (double)max_count);
+}
+
+/* How likely is it that bytearray is English text?
+ * The output is between 0.0 and 1.0, higher scores are better.
+ */
+double
+score_english_text(const bytearray_t *bytearray)
+{
+  /* English generally doesn't contain unprintables or non-letters.
+   * On average, English text has certain letter and space frequencies. */
+
+  /* Unprintable Maximum */
+  size_t max_unprint = MAX_UNPRINTABLE(bytearray->length);
+  size_t unprint = count_unprintable(bytearray);
+  double unprint_factor = score_max_count(unprint, max_unprint);
+  assert(unprint_factor >= 0.0);
+
+  /* Non-letter Maximum */
+  size_t max_nonlet = MAX_NONLETTER(bytearray->length);
+  size_t nonlet = count_nonletter(bytearray, false);
+  double nonlet_factor = score_max_count(nonlet, max_nonlet);
+  assert(nonlet_factor >= 0.0);
+
+  /* Space Frequency */
+  size_t space_count = count_space(bytearray);
+  double space_freq = space_count / (double)bytearray->length;
+  double space_dev = score_letter_frequency(space_freq,
+                                              EXPECTED_SPACE_FREQUENCY);
+  double scaled_space_dev = scale_good_deviation(space_dev,
+                                                 GOOD_SPACE_DEVIATION);
+  double space_factor = score_max_deviation(scaled_space_dev,
+                                            MAX_SPACE_DEVIATION);
+
+  /* Letter Frequency */
+  double english_dev = score_english_letter_frequency(bytearray);
+  double scaled_english_dev = scale_good_deviation(english_dev,
+                                                   GOOD_ENGLISH_DEVIATION);
+  double english_factor = score_max_deviation(scaled_english_dev,
+                                              MAX_ENGLISH_DEVIATION);
+
+  double result = (unprint_factor * nonlet_factor * space_factor
+                   * english_factor);
+
+#if SCORE_DEBUG
+  printf("Unprintable:           %zu <= %zu -> %.3f\n", unprint, max_unprint, unprint_factor);
+  printf("Non-Letter:            %zu <= %zu -> %.3f\n", nonlet, max_nonlet, nonlet_factor);
+  printf("Space (Word Length):   %.3f <= %.3f <= %.3f -> %.3f\n", GOOD_SPACE_DEVIATION, space_dev, MAX_SPACE_DEVIATION, space_factor);
+  printf("English Text Score:    %.3f <= %.3f <= %.3f -> %.3f\n", GOOD_ENGLISH_DEVIATION, english_dev, MAX_ENGLISH_DEVIATION, english_factor);
+#endif
+
+  assert(result >= 0.0);
+  assert(result <= 1.0);
+  return result;
 }

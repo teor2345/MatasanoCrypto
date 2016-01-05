@@ -14,7 +14,16 @@
 #include <sys/types.h>
 
 /* Forward Declarations */
+
 typedef struct bytearray_t bytearray_t;
+
+/* Debugging Macros */
+
+#ifndef SCORE_DEBUG
+#define SCORE_DEBUG 0
+#endif
+
+/* Function Declarations */
 
 bool is_byte_ascii_printable(uint8_t byte);
 bool is_byte_ascii_letter(uint8_t byte);
@@ -41,5 +50,6 @@ size_t count_byte(const bytearray_t *bytearray, uint8_t byte);
                                ((b)->length - count_byte(b, byte))
 
 double score_english_letter_frequency(const bytearray_t *bytearray);
+double score_english_text(const bytearray_t *bytearray);
 
 #endif /* score_h */

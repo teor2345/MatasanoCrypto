@@ -21,45 +21,9 @@
 
 const char *input_hexstr  = "1b37373331363f78151b7f2b783431333d78397828372d363c78373e783a393b3736";
 
-/* Scoring Heuristics */
-
-/* My estimate of the average English line length is 40 characters */
-#define ENGLISH_LINE_LENGTH 40
-
-/* The average English word length is 5
- * (The frequency of English spaces is 1 in 6 characters)
- * http://www.quora.com/Whats-the-average-length-of-English-words */
-#define ENGLISH_WORD_LENGTH 5
-#define ENGLISH_SPACE_LENGTH (ENGLISH_WORD_LENGTH+1)
-
-/* The average number of letters between punctuation in English text
- * The frequency of English punctuation is 208.7 per 1000 words
- * https://en.wikipedia.org/wiki/Punctuation_of_English#Frequency */
-#define ENGLISH_PUNCTUATION_LENGTH ((ENGLISH_SPACE_LENGTH*1000)/209)
-
-/* Allow for a few unprintable characters, like tabs or newlines.
- * This allows for CRLF-terminated lines 20 characters long, with an
- * additional allowance for a terminating newline.
- * (This is double my estimate of English line length, and a quarter of
- * typical terminal widths.) */
-#define MAX_UNPRINTABLE_COUNT(length) (((length)/(ENGLISH_LINE_LENGTH/4))+2)
-/* Check we actually have words, and not just blocks of text.
- * This enforces an average word length of 10 or fewer letters.
- * (This is double the typical English average word length of 5 letters.) */
-#define MIN_SPACE_COUNT(length) ((length)/(ENGLISH_SPACE_LENGTH*2))
-/* Non-letters include punctuation but exclude spaces. This allows for
- * punctuation every 14 characters. (This is double the typical English
- * punctuation frequency of 28 characters.) */
-#define MAX_NONLETTER_COUNT(length) ((length)/(ENGLISH_PUNCTUATION_LENGTH/2))
-
-/* The maximum RMS variation from typical English letter frequencies.
- * The score is independent of the length of the text.
- * It's between 0 and 1, with good scores being around 0.045.
- * We allow just slightly more than that, because most scores are around 0.05.
- */
-#define MAX_ENGLISH_SCORE (0.049)
-
 /* Implementation */
+
+#define MIN_ENGLISH_TEXT_SCORE 0.1
 
 int
 main(int argc, const char * argv[])
@@ -83,30 +47,12 @@ main(int argc, const char * argv[])
   do {
     bytearray_t *output_bytearray = bytearray_xor_byte(input_bytearray, byte);
 
-    /* avoid printing candiates decryptions that contain unprintable
-     * characters, or too many non-letters */
-    size_t max_unprint = MAX_UNPRINTABLE_COUNT(output_bytearray->length);
-    size_t max_nonletter = MAX_NONLETTER_COUNT(output_bytearray->length);
-    size_t min_space = MIN_SPACE_COUNT(output_bytearray->length);
-    double max_score = MAX_ENGLISH_SCORE;
+    double score = score_english_text(output_bytearray);
 
-    size_t unprint = count_unprintable(output_bytearray);
-    size_t nonletter = count_nonletter(output_bytearray, 0);
-    size_t space = count_space(output_bytearray);
-    double score = score_english_letter_frequency(output_bytearray);
-    if (unprint <= max_unprint
-        && nonletter <= max_nonletter
-        && space >= min_space
-        && score <= max_score) {
+    if (score >= MIN_ENGLISH_TEXT_SCORE) {
       /* Bytes -> Hex */
-      printf("\n");
-
       printf("XOR Byte:              %hhu %c 0x%hhx\n", byte, byte, byte);
-
-      printf("Unprintable:           %zu <= %zu\n", unprint, max_unprint);
-      printf("Non-Letter:            %zu <= %zu\n", nonletter, max_nonletter);
-      printf("Space (Word Length):   %zu >= %zu\n", space, min_space);
-      printf("English Text Score:    %.3f <= %.3f\n", score, max_score);
+      printf("Overall Score:         %.3f\n", score);
 
       char *output_hexstr = bytearray_to_hexstr(output_bytearray);
       printf("Hex XOR:               %s\n", output_hexstr);
@@ -116,6 +62,7 @@ main(int argc, const char * argv[])
 
       char *output_asciistr = bytearray_to_asciistr(output_bytearray);
       printf("Escaped Bytes XOR:     %s\n", output_asciistr);
+      printf("\n");
 
       /* Cleanup conditional loop allocations */
       free(output_hexstr);
@@ -127,7 +74,7 @@ main(int argc, const char * argv[])
 
     byte++;
 
-    /* rely on unsigned integers wrapping to 0 on overflow to exit the loop */
+    /* rely on unsigned integer wrapping to 0 on overflow to exit the loop */
   } while (byte != 0);
 
   /* Cleanup input allocations */
