@@ -75,7 +75,8 @@ bytearray_free_(bytearray_t *bytearray)
   free(bytearray);
 }
 
-/* Return a new bytearray that has the same length and content as src.
+/* Return a newly allocated bytearray that has the same length and content as
+ * src.
  * Must be freed using bytearray_free(). */
 bytearray_t *
 bytearray_dup(const bytearray_t *src)
@@ -95,6 +96,39 @@ bytearray_dup(const bytearray_t *src)
 
   assert(is_bytearray_consistent(result));
   return result;
+}
+
+/* Return a newly allocated bytearray that is length long and has the same
+ * content as buf.
+ * bytes can only be NULL if length is zero, in this case, a non-NULL, empty
+ * bytearray is returned.
+ * Must be freed using bytearray_free(). */
+bytearray_t *
+bytes_to_bytearray(const uint8_t *bytes, size_t length)
+{
+  if (length > 0) {
+    assert(bytes != NULL);
+  }
+
+  bytearray_t * const bytearray = bytearray_alloc(length);
+  assert(bytearray != NULL);
+  assert(is_bytearray_consistent(bytearray));
+
+  memcpy(bytearray->bytes, bytes, length);
+  bytearray->length = length;
+  assert(is_bytearray_consistent(bytearray));
+
+  return bytearray;
+}
+
+/* Return a newly allocated bytearray that has the same content as str,
+ * excluding the terminating nul character.
+ * If str is NULL or "", a non-NULL, empty bytearray is returned.
+ * Must be freed using bytearray_free(). */
+bytearray_t *
+str_to_bytearray(const char *str)
+{
+  return bytes_to_bytearray((uint8_t *)str, strlen(str));
 }
 
 /* Set bytearray->bytes[index] to byte, checking that bytearray is valid and

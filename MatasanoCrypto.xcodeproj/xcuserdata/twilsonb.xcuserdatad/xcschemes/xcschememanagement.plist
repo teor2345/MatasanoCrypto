@@ -24,6 +24,11 @@
 			<key>orderHint</key>
 			<integer>3</integer>
 		</dict>
+		<key>s1c5-xor-repeat.xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>4</integer>
+		</dict>
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
@@ -43,6 +48,11 @@
 			<true/>
 		</dict>
 		<key>02913FC51C3B29F2001A5096</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>02913FD91C3BC31E001A5096</key>
 		<dict>
 			<key>primary</key>
 			<true/>

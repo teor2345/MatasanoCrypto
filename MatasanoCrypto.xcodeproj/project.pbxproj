@@ -36,6 +36,14 @@
 		02913FCD1C3B29F2001A5096 /* hex.c in Sources */ = {isa = PBXBuildFile; fileRef = 02913F991C37CD83001A5096 /* hex.c */; };
 		02913FD41C3B2BAB001A5096 /* s1c4-xor-cipher-detect.c in Sources */ = {isa = PBXBuildFile; fileRef = 02913FD31C3B2BAB001A5096 /* s1c4-xor-cipher-detect.c */; };
 		02913FD81C3B79AB001A5096 /* 4.txt in CopyFiles */ = {isa = PBXBuildFile; fileRef = 02913FD61C3B2C67001A5096 /* 4.txt */; };
+		02913FDB1C3BC31E001A5096 /* score.c in Sources */ = {isa = PBXBuildFile; fileRef = 02913FC01C3A885D001A5096 /* score.c */; };
+		02913FDD1C3BC31E001A5096 /* char.c in Sources */ = {isa = PBXBuildFile; fileRef = 02913F961C37CC10001A5096 /* char.c */; };
+		02913FDE1C3BC31E001A5096 /* calc.c in Sources */ = {isa = PBXBuildFile; fileRef = 02913F901C37C9C7001A5096 /* calc.c */; };
+		02913FDF1C3BC31E001A5096 /* bit_ops.c in Sources */ = {isa = PBXBuildFile; fileRef = 02913FAE1C3A7769001A5096 /* bit_ops.c */; };
+		02913FE01C3BC31E001A5096 /* bytearray.c in Sources */ = {isa = PBXBuildFile; fileRef = 02913F931C37CA9C001A5096 /* bytearray.c */; };
+		02913FE11C3BC31E001A5096 /* hex.c in Sources */ = {isa = PBXBuildFile; fileRef = 02913F991C37CD83001A5096 /* hex.c */; };
+		02913FE41C3BC31E001A5096 /* 4.txt in CopyFiles */ = {isa = PBXBuildFile; fileRef = 02913FD61C3B2C67001A5096 /* 4.txt */; };
+		02913FEA1C3BC34E001A5096 /* s1c5-xor-repeat.c in Sources */ = {isa = PBXBuildFile; fileRef = 02913FE91C3BC34E001A5096 /* s1c5-xor-repeat.c */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -46,6 +54,16 @@
 			dstSubfolderSpec = 16;
 			files = (
 				02913FD81C3B79AB001A5096 /* 4.txt in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		02913FE31C3BC31E001A5096 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 16;
+			files = (
+				02913FE41C3BC31E001A5096 /* 4.txt in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -75,6 +93,8 @@
 		02913FD21C3B29F2001A5096 /* s1c4-xor-cipher-detect */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "s1c4-xor-cipher-detect"; sourceTree = BUILT_PRODUCTS_DIR; };
 		02913FD31C3B2BAB001A5096 /* s1c4-xor-cipher-detect.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = "s1c4-xor-cipher-detect.c"; sourceTree = "<group>"; };
 		02913FD61C3B2C67001A5096 /* 4.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = 4.txt; sourceTree = "<group>"; };
+		02913FE81C3BC31E001A5096 /* s1c5-xor-repeat */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "s1c5-xor-repeat"; sourceTree = BUILT_PRODUCTS_DIR; };
+		02913FE91C3BC34E001A5096 /* s1c5-xor-repeat.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = "s1c5-xor-repeat.c"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -106,6 +126,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		02913FE21C3BC31E001A5096 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -126,6 +153,7 @@
 				02913FAB1C3A73BD001A5096 /* s1c2-xor-fixed */,
 				02913FBD1C3A7ECC001A5096 /* s1c3-xor-cipher */,
 				02913FD21C3B29F2001A5096 /* s1c4-xor-cipher-detect */,
+				02913FE81C3BC31E001A5096 /* s1c5-xor-repeat */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -137,6 +165,7 @@
 				02913FAC1C3A747A001A5096 /* s1c2-xor-fixed.c */,
 				02913FBE1C3A7F21001A5096 /* s1c3-xor-cipher.c */,
 				02913FD31C3B2BAB001A5096 /* s1c4-xor-cipher-detect.c */,
+				02913FE91C3BC34E001A5096 /* s1c5-xor-repeat.c */,
 			);
 			path = Challenges;
 			sourceTree = "<group>";
@@ -238,6 +267,23 @@
 			productReference = 02913FD21C3B29F2001A5096 /* s1c4-xor-cipher-detect */;
 			productType = "com.apple.product-type.tool";
 		};
+		02913FD91C3BC31E001A5096 /* s1c5-xor-repeat */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 02913FE51C3BC31E001A5096 /* Build configuration list for PBXNativeTarget "s1c5-xor-repeat" */;
+			buildPhases = (
+				02913FDA1C3BC31E001A5096 /* Sources */,
+				02913FE21C3BC31E001A5096 /* Frameworks */,
+				02913FE31C3BC31E001A5096 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "s1c5-xor-repeat";
+			productName = MatasanoCrypto;
+			productReference = 02913FE81C3BC31E001A5096 /* s1c5-xor-repeat */;
+			productType = "com.apple.product-type.tool";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -268,6 +314,7 @@
 				02913F9F1C3A73BD001A5096 /* s1c2-xor-fixed */,
 				02913FB11C3A7ECC001A5096 /* s1c3-xor-cipher */,
 				02913FC51C3B29F2001A5096 /* s1c4-xor-cipher-detect */,
+				02913FD91C3BC31E001A5096 /* s1c5-xor-repeat */,
 			);
 		};
 /* End PBXProject section */
@@ -326,6 +373,20 @@
 				02913FCB1C3B29F2001A5096 /* bit_ops.c in Sources */,
 				02913FCC1C3B29F2001A5096 /* bytearray.c in Sources */,
 				02913FCD1C3B29F2001A5096 /* hex.c in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		02913FDA1C3BC31E001A5096 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				02913FDB1C3BC31E001A5096 /* score.c in Sources */,
+				02913FEA1C3BC34E001A5096 /* s1c5-xor-repeat.c in Sources */,
+				02913FDD1C3BC31E001A5096 /* char.c in Sources */,
+				02913FDE1C3BC31E001A5096 /* calc.c in Sources */,
+				02913FDF1C3BC31E001A5096 /* bit_ops.c in Sources */,
+				02913FE01C3BC31E001A5096 /* bytearray.c in Sources */,
+				02913FE11C3BC31E001A5096 /* hex.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -527,6 +588,20 @@
 			};
 			name = Release;
 		};
+		02913FE61C3BC31E001A5096 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		02913FE71C3BC31E001A5096 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -571,6 +646,15 @@
 			buildConfigurations = (
 				02913FD01C3B29F2001A5096 /* Debug */,
 				02913FD11C3B29F2001A5096 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		02913FE51C3BC31E001A5096 /* Build configuration list for PBXNativeTarget "s1c5-xor-repeat" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				02913FE61C3BC31E001A5096 /* Debug */,
+				02913FE71C3BC31E001A5096 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

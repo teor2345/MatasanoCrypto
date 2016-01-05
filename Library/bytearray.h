@@ -34,6 +34,9 @@ void bytearray_free_(bytearray_t *bytearray);
 
 bytearray_t *bytearray_dup(const bytearray_t *src);
 
+bytearray_t *bytes_to_bytearray(const uint8_t *bytes, size_t length);
+bytearray_t *str_to_bytearray(const char *str);
+
 void bytearray_set_checked(bytearray_t *bytearray, size_t index, uint8_t byte);
 uint8_t bytearray_get_checked(const bytearray_t *bytearray, size_t index);
 uint8_t *bytearray_pointer_checked(bytearray_t *bytearray, size_t index,
