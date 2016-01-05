@@ -15,9 +15,10 @@
 #include <sys/types.h>
 
 /* Forward Declarations */
+
 typedef struct bytearray_t bytearray_t;
 
-/* Hexadecimal Characters */
+/* Hexadecimal Constants */
 
 static const uint8_t HEX_BIT = 4;
 static const uint8_t HEX_BASE = 1 << HEX_BIT;
@@ -39,6 +40,8 @@ typedef enum {
   HEXCHAR_ACCEPT_UPPERCASE_ONLY,
   HEXCHAR_OUTPUT_UPPERCASE = HEXCHAR_ACCEPT_UPPERCASE_ONLY
 } hex_case_t;
+
+/* Hexadecimal Characters */
 
 bool is_hexchar_lowercase_accepted(hex_case_t hexcase);
 bool is_hexchar_lowercase_output(hex_case_t hexcase);

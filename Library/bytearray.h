@@ -13,10 +13,14 @@
 #include <stdbool.h>
 #include <sys/types.h>
 
+/* Data Types */
+
 typedef struct bytearray_t {
   size_t length;
   uint8_t *bytes;
 } bytearray_t;
+
+/* Function Declarations */
 
 bool is_bytearray_consistent(const bytearray_t *bytearray);
 

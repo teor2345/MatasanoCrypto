@@ -12,6 +12,8 @@
 
 #include <sys/types.h>
 
+/* Function Declarations */
+
 size_t ceil_div(size_t dividend, size_t divisor);
 
 #endif /* calc_h */

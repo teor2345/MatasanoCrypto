@@ -13,7 +13,10 @@
 #include <sys/types.h>
 
 /* Forward Declarations */
+
 typedef struct bytearray_t bytearray_t;
+
+/* Function Declarations */
 
 bytearray_t *bytearray_xor(const bytearray_t *b1, const bytearray_t *b2);
 bytearray_t *bytearray_xor_byte(const bytearray_t *bytearray, uint8_t byte);

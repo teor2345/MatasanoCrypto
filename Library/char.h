@@ -14,6 +14,8 @@
 #include <stdbool.h>
 #include <sys/types.h>
 
+/* Function Declarations */
+
 static const uint8_t BYTE_BIT = 8;
 static const uint8_t ASCII_CHARS_PER_BYTE = BYTE_BIT / CHAR_BIT;
 

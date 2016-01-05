@@ -19,7 +19,7 @@
 /* Forward Declarations */
 typedef struct bytearray_t bytearray_t;
 
-/* Base64 Characters */
+/* Base64 Constants */
 
 static const uint8_t BASE64_BIT = 6;
 static const uint8_t BASE64_BASE = 1 << BASE64_BIT;
@@ -49,6 +49,8 @@ typedef enum {
   /* All other variants are incompatible with one of the listed variants,
    * because they re-use one of the characters in another position */
 } base64_variant_t;
+
+/* Base64 Characters */
 
 bool is_base64char_plus_accepted(base64_variant_t variant);
 bool is_base64char_plus_output(base64_variant_t variant);
