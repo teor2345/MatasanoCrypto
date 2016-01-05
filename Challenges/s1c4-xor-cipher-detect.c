@@ -82,8 +82,8 @@ main(int argc, const char * argv[])
       if (score >= MIN_ENGLISH_TEXT_SCORE) {
         printf("Hex:                 %s\n", input_hexstr);
 
-        char *input_asciistr = bytearray_to_escstr(input_bytearray);
-        printf("Escaped Bytes:       %s\n", input_asciistr);
+        char *input_escstr = bytearray_to_escstr(input_bytearray);
+        printf("Escaped Bytes:       %s\n", input_escstr);
 
         /* Bytes -> Hex */
         printf("XOR Byte:              %hhu %c 0x%hhx\n", byte, byte, byte);
@@ -95,14 +95,14 @@ main(int argc, const char * argv[])
         /*printf("Bytes XOR:             %s\n", (char *)output_bytearray->bytes);
          */
 
-        char *output_asciistr = bytearray_to_escstr(output_bytearray);
-        printf("Escaped Bytes XOR:     %s\n", output_asciistr);
+        char *output_escstr = bytearray_to_escstr(output_bytearray);
+        printf("Escaped Bytes XOR:     %s\n", output_escstr);
         printf("\n");
 
         /* Cleanup conditional loop allocations */
-        free(input_asciistr);
+        free(input_escstr);
         free(output_hexstr);
-        free(output_asciistr);
+        free(output_escstr);
       }
 
       /* Cleanup loop allocations */

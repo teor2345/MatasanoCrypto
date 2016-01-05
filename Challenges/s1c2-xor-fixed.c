@@ -43,11 +43,11 @@ main(int argc, const char * argv[])
   bytearray_t *input_bytearray_2 = hexstr_to_bytearray(input_hexstr_2);
   /*printf("Bytes 2:               %s\n", (char *)input_bytearray_2->bytes);*/
 
-  char *input_asciistr_1 = bytearray_to_escstr(input_bytearray_1);
-  printf("Escaped Bytes 1:       %s\n", input_asciistr_1);
+  char *input_escstr_1 = bytearray_to_escstr(input_bytearray_1);
+  printf("Escaped Bytes 1:       %s\n", input_escstr_1);
 
-  char *input_asciistr_2 = bytearray_to_escstr(input_bytearray_2);
-  printf("Escaped Bytes 2:       %s\n", input_asciistr_2);
+  char *input_escstr_2 = bytearray_to_escstr(input_bytearray_2);
+  printf("Escaped Bytes 2:       %s\n", input_escstr_2);
 
   /* XOR */
   bytearray_t *output_bytearray = bytearray_xor(input_bytearray_1,
@@ -59,8 +59,8 @@ main(int argc, const char * argv[])
 
   /*printf("Bytes XOR:             %s\n", (char *)output_bytearray->bytes);*/
 
-  char *output_asciistr = bytearray_to_escstr(output_bytearray);
-  printf("Escaped Bytes XOR:     %s\n", output_asciistr);
+  char *output_escstr = bytearray_to_escstr(output_bytearray);
+  printf("Escaped Bytes XOR:     %s\n", output_escstr);
 
   if (!strcmp(output_hexstr, expected_hexstr)) {
     printf("Calculated Output matches Expected Output\n");
@@ -71,11 +71,11 @@ main(int argc, const char * argv[])
   /* Cleanup */
   bytearray_free(input_bytearray_1);
   bytearray_free(input_bytearray_2);
-  free(input_asciistr_1);
-  free(input_asciistr_2);
+  free(input_escstr_1);
+  free(input_escstr_2);
   bytearray_free(output_bytearray);
   free(output_hexstr);
-  free(output_asciistr);
+  free(output_escstr);
 
   return 0;
 }
