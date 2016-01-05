@@ -35,7 +35,21 @@
 		02913FCC1C3B29F2001A5096 /* bytearray.c in Sources */ = {isa = PBXBuildFile; fileRef = 02913F931C37CA9C001A5096 /* bytearray.c */; };
 		02913FCD1C3B29F2001A5096 /* hex.c in Sources */ = {isa = PBXBuildFile; fileRef = 02913F991C37CD83001A5096 /* hex.c */; };
 		02913FD41C3B2BAB001A5096 /* s1c4-xor-cipher-detect.c in Sources */ = {isa = PBXBuildFile; fileRef = 02913FD31C3B2BAB001A5096 /* s1c4-xor-cipher-detect.c */; };
+		02913FD81C3B79AB001A5096 /* 4.txt in CopyFiles */ = {isa = PBXBuildFile; fileRef = 02913FD61C3B2C67001A5096 /* 4.txt */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		02913FD71C3B799C001A5096 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 16;
+			files = (
+				02913FD81C3B79AB001A5096 /* 4.txt in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		02913F851C3673E4001A5096 /* s1c1-hex-to-base64 */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "s1c1-hex-to-base64"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -60,6 +74,7 @@
 		02913FC11C3A885D001A5096 /* score.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = score.h; path = Library/score.h; sourceTree = "<group>"; };
 		02913FD21C3B29F2001A5096 /* s1c4-xor-cipher-detect */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "s1c4-xor-cipher-detect"; sourceTree = BUILT_PRODUCTS_DIR; };
 		02913FD31C3B2BAB001A5096 /* s1c4-xor-cipher-detect.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = "s1c4-xor-cipher-detect.c"; sourceTree = "<group>"; };
+		02913FD61C3B2C67001A5096 /* 4.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = 4.txt; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -99,6 +114,7 @@
 			children = (
 				02913F8F1C37C964001A5096 /* Library */,
 				02913F871C3673E4001A5096 /* Challenges */,
+				02913FD51C3B2C67001A5096 /* Data */,
 				02913F861C3673E4001A5096 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -144,6 +160,14 @@
 				02913FC11C3A885D001A5096 /* score.h */,
 			);
 			name = Library;
+			sourceTree = "<group>";
+		};
+		02913FD51C3B2C67001A5096 /* Data */ = {
+			isa = PBXGroup;
+			children = (
+				02913FD61C3B2C67001A5096 /* 4.txt */,
+			);
+			path = Data;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -203,6 +227,7 @@
 			buildPhases = (
 				02913FC61C3B29F2001A5096 /* Sources */,
 				02913FCE1C3B29F2001A5096 /* Frameworks */,
+				02913FD71C3B799C001A5096 /* CopyFiles */,
 			);
 			buildRules = (
 			);
@@ -340,7 +365,7 @@
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_NS_ASSERTIONS = YES;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				ENABLE_TESTABILITY = YES;
+				ENABLE_TESTABILITY = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_PASCAL_STRINGS = NO;
@@ -413,6 +438,7 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = YES;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_ENABLE_PASCAL_STRINGS = NO;
 				GCC_INCREASE_PRECOMPILED_HEADER_SHARING = YES;
