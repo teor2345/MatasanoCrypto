@@ -29,7 +29,7 @@ bool is_byte_ascii_printable(uint8_t byte);
 bool is_byte_ascii_letter(uint8_t byte);
 bool is_byte_ascii_space(uint8_t byte);
 
-char *bytearray_to_asciistr(const bytearray_t *bytearray);
+char *bytearray_to_escstr(const bytearray_t *bytearray);
 
 size_t count_printable(const bytearray_t *bytearray);
 /* Return the number of unprintable ASCII characters in bytearray. */

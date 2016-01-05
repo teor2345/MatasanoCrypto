@@ -59,7 +59,7 @@ is_byte_ascii_space(uint8_t byte)
  * Outputs lowercase hexadecimal characters in escapes.
  * The caller must free() the returned string. */
 char *
-bytearray_to_asciistr(const bytearray_t *bytearray)
+bytearray_to_escstr(const bytearray_t *bytearray)
 {
   assert(bytearray != NULL);
   assert(is_bytearray_consistent(bytearray));

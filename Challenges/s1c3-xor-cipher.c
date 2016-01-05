@@ -38,7 +38,7 @@ main(int argc, const char * argv[])
   bytearray_t *input_bytearray = hexstr_to_bytearray(input_hexstr);
   /*printf("Bytes:               %s\n", (char *)input_bytearray->bytes);*/
 
-  char *input_asciistr = bytearray_to_asciistr(input_bytearray);
+  char *input_asciistr = bytearray_to_escstr(input_bytearray);
   printf("Escaped Bytes:       %s\n", input_asciistr);
 
   /* Try every different XOR value
@@ -60,7 +60,7 @@ main(int argc, const char * argv[])
       /*printf("Bytes XOR:             %s\n", (char *)output_bytearray->bytes);
        */
 
-      char *output_asciistr = bytearray_to_asciistr(output_bytearray);
+      char *output_asciistr = bytearray_to_escstr(output_bytearray);
       printf("Escaped Bytes XOR:     %s\n", output_asciistr);
       printf("\n");
 
