@@ -116,6 +116,10 @@ main(int argc, const char * argv[])
     /* Cleanup input allocations */
     bytearray_free(input_bytearray);
   }
+
+  /* Close the file */
+  int rv = fclose(f);
+  assert(rv == 0);
   
   return 0;
 }
