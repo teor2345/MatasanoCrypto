@@ -30,6 +30,7 @@ void bytearray_free_(bytearray_t *bytearray);
   } while (0)
 
 bytearray_t *bytearray_dup(const bytearray_t *src);
+bytearray_t *bytearray_cat(const bytearray_t *src1, const bytearray_t *src2);
 
 size_t bytearray_length(const bytearray_t *bytearray);
 

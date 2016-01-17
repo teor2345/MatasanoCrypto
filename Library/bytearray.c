@@ -107,6 +107,38 @@ bytearray_dup(const bytearray_t *src)
   return result;
 }
 
+/* Return a newly allocated bytearray that has the content of src1 and src2 in
+ * that order. Its length is the sum of the lengths of src1 and src2.
+ * Must be freed using bytearray_free(). */
+bytearray_t *
+bytearray_cat(const bytearray_t *src1, const bytearray_t *src2)
+{
+  assert(src1 != NULL);
+  assert(is_bytearray_consistent(src1));
+  assert(src2 != NULL);
+  assert(is_bytearray_consistent(src2));
+
+  size_t result_length = 0;
+  assert(checked_add(bytearray_length(src1), bytearray_length(src2),
+                     &result_length)
+         == 0);
+  bytearray_t *result = bytearray_alloc(result_length);
+  assert(result != NULL);
+  assert(is_bytearray_consistent(result));
+
+  if (result->bytes != NULL && src1->bytes != NULL) {
+    memcpy(result->bytes, src1->bytes, bytearray_length(src1));
+  }
+
+  if (result->bytes != NULL && src2->bytes != NULL) {
+    memcpy(result->bytes + bytearray_length(src1), src2->bytes,
+           bytearray_length(src2));
+  }
+
+  assert(is_bytearray_consistent(result));
+  return result;
+}
+
 /* Return the length of the bytearray */
 size_t
 bytearray_length(const bytearray_t *bytearray)
