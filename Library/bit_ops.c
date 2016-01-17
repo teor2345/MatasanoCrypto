@@ -35,19 +35,20 @@ bytearray_xor(const bytearray_t *b1, const bytearray_t *b2)
 
   /* If either bytearray is zero length, return a copy of the other bytearray
    * (if both are zero length, this returns a zero length bytearray) */
-  if (b1->length == 0 || b2->length == 0) {
-    const bytearray_t *src = (b1->length > 0 ? b1 : b2);
+  if (bytearray_length(b1) == 0 || bytearray_length(b2) == 0) {
+    const bytearray_t *src = (bytearray_length(b1) > 0 ? b1 : b2);
 
     /* don't repeat the assertions in bytearray_dup */
     return bytearray_dup(src);
   } else {
-    bytearray_t * const result = bytearray_alloc(MAX(b1->length, b2->length));
+    bytearray_t * const result = bytearray_alloc(MAX(bytearray_length(b1),
+                                                     bytearray_length(b2)));
     assert(result != NULL);
     assert(is_bytearray_consistent(result));
 
-    for (size_t i = 0; i < result->length; i++) {
-      uint8_t byte1 = bytearray_get_checked(b1, i % b1->length);
-      uint8_t byte2 = bytearray_get_checked(b2, i % b2->length);
+    for (size_t i = 0; i < bytearray_length(result); i++) {
+      uint8_t byte1 = bytearray_get_checked(b1, i % bytearray_length(b1));
+      uint8_t byte2 = bytearray_get_checked(b2, i % bytearray_length(b2));
 
       uint8_t byte_result = byte1 ^ byte2;
       bytearray_set_checked(result, i, byte_result);

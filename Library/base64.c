@@ -342,7 +342,8 @@ base64str_to_bytearray(const char *base64str)
   assert(base64_block_count == ceil_div(base64str_len * BASE64_BIT,
                                         BASE64_BLOCK_BIT));
   bytearray = bytearray_alloc(base64_block_count * BASE64_BYTES_PER_BLOCK);
-  assert(bytearray->length / base64_block_count == BASE64_BYTES_PER_BLOCK);
+  assert(bytearray_length(bytearray) / base64_block_count
+         == BASE64_BYTES_PER_BLOCK);
   assert(is_bytearray_consistent(bytearray));
 
   size_t i = 0;
@@ -352,7 +353,8 @@ base64str_to_bytearray(const char *base64str)
 
     assert(base64str_pos < base64str_len);
     /* Allow for the entire block */
-    assert(bytearray_pos + BASE64_BYTES_PER_BLOCK - 1 < bytearray->length);
+    assert(bytearray_pos + BASE64_BYTES_PER_BLOCK - 1
+           < bytearray_length(bytearray));
 
     char base64_char_block[BASE64_CHARS_PER_BLOCK];
 
@@ -377,7 +379,7 @@ base64str_to_bytearray(const char *base64str)
   }
 
   /* Did we actually look at everything? */
-  assert(i == bytearray->length / BASE64_BYTES_PER_BLOCK);
+  assert(i == bytearray_length(bytearray) / BASE64_BYTES_PER_BLOCK);
   assert(i == ceil_div(base64str_len, BASE64_CHARS_PER_BLOCK));
 
   assert(is_bytearray_consistent(bytearray));
@@ -403,9 +405,9 @@ bytearray_to_base64str(const bytearray_t *bytearray)
 
   /* round up the length to the nearest block (4 base64 chars) if the bytes
    * don't fit evenly into a block */
-  const size_t base64_block_count = ceil_div(bytearray->length,
+  const size_t base64_block_count = ceil_div(bytearray_length(bytearray),
                                              BASE64_BYTES_PER_BLOCK);
-  assert(base64_block_count == ceil_div(bytearray->length * BYTE_BIT,
+  assert(base64_block_count == ceil_div(bytearray_length(bytearray) * BYTE_BIT,
                                         BASE64_BLOCK_BIT));
   /* One extra byte for the terminating nul */
   const size_t base64str_len = base64_block_count * BASE64_CHARS_PER_BLOCK + 1;
@@ -426,12 +428,12 @@ bytearray_to_base64str(const bytearray_t *bytearray)
 
     /* Allow for the entire block */
     assert(base64str_pos + BASE64_CHARS_PER_BLOCK - 1 < base64str_len - 1);
-    assert(bytearray_pos < bytearray->length);
+    assert(bytearray_pos < bytearray_length(bytearray));
 
     uint8_t base64_byte_block[BASE64_BYTES_PER_BLOCK];
 
     for (size_t j = 0; j < BASE64_BYTES_PER_BLOCK; j++) {
-      if (bytearray_pos + j < bytearray->length) {
+      if (bytearray_pos + j < bytearray_length(bytearray)) {
         base64_byte_block[j] = bytearray_get_checked(bytearray,
                                                      bytearray_pos + j);
       } else {
@@ -448,7 +450,7 @@ bytearray_to_base64str(const bytearray_t *bytearray)
   }
 
   /* Did we actually look at everything? */
-  assert(i == ceil_div(bytearray->length, BASE64_BYTES_PER_BLOCK));
+  assert(i == ceil_div(bytearray_length(bytearray), BASE64_BYTES_PER_BLOCK));
   assert(i == (base64str_len - 1) / BASE64_CHARS_PER_BLOCK);
 
   /* Check each character is valid base64 */

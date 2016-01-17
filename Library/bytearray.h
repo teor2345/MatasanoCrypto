@@ -13,12 +13,9 @@
 #include <stdbool.h>
 #include <sys/types.h>
 
-/* Data Types */
+/* Forward Declarations */
 
-typedef struct bytearray_t {
-  size_t length;
-  uint8_t *bytes;
-} bytearray_t;
+typedef struct bytearray_t bytearray_t;
 
 /* Function Declarations */
 
@@ -33,6 +30,8 @@ void bytearray_free_(bytearray_t *bytearray);
   } while (0)
 
 bytearray_t *bytearray_dup(const bytearray_t *src);
+
+size_t bytearray_length(const bytearray_t *bytearray);
 
 bytearray_t *bytes_to_bytearray(const uint8_t *bytes, size_t length);
 bytearray_t *str_to_bytearray(const char *str);

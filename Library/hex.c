@@ -193,12 +193,12 @@ hexstr_to_bytearray(const char *hexstr)
 
   /* round up the length if there is an odd number of hex characters */
   bytearray = bytearray_alloc(ceil_div(hexstr_len, HEXCHARS_PER_BYTE));
-  assert(bytearray->length == ((hexstr_len / HEXCHARS_PER_BYTE)
-                               + (hexstr_len % HEXCHARS_PER_BYTE)));
+  assert(bytearray_length(bytearray) == ((hexstr_len / HEXCHARS_PER_BYTE)
+                                         + (hexstr_len % HEXCHARS_PER_BYTE)));
   assert(is_bytearray_consistent(bytearray));
 
   size_t i = 0;
-  for (i = 0; i < bytearray->length; i++) {
+  for (i = 0; i < bytearray_length(bytearray); i++) {
     const size_t hexstr_pos = i * HEXCHARS_PER_BYTE;
 
     assert(hexstr_pos < hexstr_len);
@@ -217,7 +217,7 @@ hexstr_to_bytearray(const char *hexstr)
   }
 
   /* Did we actually look at everything? */
-  assert(i == bytearray->length);
+  assert(i == bytearray_length(bytearray));
   assert(i == ceil_div(hexstr_len, HEXCHARS_PER_BYTE));
   assert(is_bytearray_consistent(bytearray));
 
@@ -238,14 +238,15 @@ bytearray_to_hexstr(const bytearray_t *bytearray)
   assert(is_bytearray_consistent(bytearray));
 
   /* One extra byte for the terminating nul */
-  const size_t hexstr_len = bytearray->length * HEXCHARS_PER_BYTE + 1;
+  const size_t hexstr_len = (
+                          bytearray_length(bytearray) * HEXCHARS_PER_BYTE + 1);
   char * const hexstr = malloc(hexstr_len);
   assert(hexstr != NULL);
   /* Avoid having to add the terminating nul later */
   memset(hexstr, 0, hexstr_len);
 
   size_t i = 0;
-  for (i = 0; i < bytearray->length; i++) {
+  for (i = 0; i < bytearray_length(bytearray); i++) {
     const size_t hexstr_pos = i * HEXCHARS_PER_BYTE;
 
     /* Don't ever overwrite the terminating nul, and allow for the second
@@ -256,7 +257,7 @@ bytearray_to_hexstr(const bytearray_t *bytearray)
   }
 
   /* Did we actually look at everything, except the terminating nul? */
-  assert(i == bytearray->length);
+  assert(i == bytearray_length(bytearray));
   assert(i * HEXCHARS_PER_BYTE == hexstr_len - 1);
 
   return hexstr;

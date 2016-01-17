@@ -13,13 +13,20 @@
 #include <stdlib.h>
 #include <string.h>
 
+/* Private Data Types */
+typedef struct bytearray_t {
+  size_t length;
+  uint8_t *bytes;
+} bytearray_t;
+
 /* Are the length and bytes fields of bytearray consistent? */
 bool
 is_bytearray_consistent(const bytearray_t *bytearray)
 {
   return (bytearray != NULL
-          && ((bytearray->length > 0 && bytearray->bytes != NULL)
-              || (bytearray->length == 0 && bytearray->bytes == NULL)));
+          && ((bytearray_length(bytearray) > 0 && bytearray->bytes != NULL)
+              || (bytearray_length(bytearray) == 0
+                  && bytearray->bytes == NULL)));
 }
 
 /* Allocate and return a bytearray_t of length using malloc().
@@ -32,15 +39,15 @@ bytearray_alloc(size_t length)
   bytearray_t * const bytearray = malloc(sizeof(*bytearray));
   bytearray->length = length;
   if (length > 0) {
-    bytearray->bytes = malloc(bytearray->length);
+    bytearray->bytes = malloc(bytearray_length(bytearray));
     assert(bytearray->bytes != NULL);
-    memset(bytearray->bytes, 0, bytearray->length);
+    memset(bytearray->bytes, 0, bytearray_length(bytearray));
   } else {
     bytearray->bytes = NULL;
   }
 
   assert(bytearray != NULL);
-  assert(bytearray->length == length);
+  assert(bytearray_length(bytearray) == length);
 
   assert(is_bytearray_consistent(bytearray));
 
@@ -64,7 +71,7 @@ bytearray_free_(bytearray_t *bytearray)
 
   if (bytearray->bytes != NULL) {
     /* I just can't spell 0xfree */
-    memset(bytearray->bytes, 0xfe, bytearray->length);
+    memset(bytearray->bytes, 0xfe, bytearray_length(bytearray));
     free(bytearray->bytes);
     bytearray->bytes = NULL;
     bytearray->length = 0;
@@ -96,6 +103,13 @@ bytearray_dup(const bytearray_t *src)
 
   assert(is_bytearray_consistent(result));
   return result;
+}
+
+/* Return the length of the bytearray */
+size_t
+bytearray_length(const bytearray_t *bytearray)
+{
+  return bytearray->length;
 }
 
 /* Return a newly allocated bytearray that is length long and has the same
@@ -138,7 +152,7 @@ bytearray_set_checked(bytearray_t *bytearray, size_t index, uint8_t byte)
 {
   assert(bytearray);
   assert(is_bytearray_consistent(bytearray));
-  assert(index < bytearray->length);
+  assert(index < bytearray_length(bytearray));
   /* byte can take any valid value for the type */
 
   bytearray->bytes[index] = byte;
@@ -153,7 +167,7 @@ bytearray_get_checked(const bytearray_t *bytearray, size_t index)
 {
   assert(bytearray);
   assert(is_bytearray_consistent(bytearray));
-  assert(index < bytearray->length);
+  assert(index < bytearray_length(bytearray));
 
   return bytearray->bytes[index];
 }
@@ -168,11 +182,11 @@ bytearray_pointer_checked(bytearray_t *bytearray, size_t index, size_t range)
 {
   assert(bytearray);
   assert(is_bytearray_consistent(bytearray));
-  assert(index < bytearray->length);
+  assert(index < bytearray_length(bytearray));
   assert(range > 0);
   /* This checks access to bytearray[index + range - 1], but not
    * bytearray[index + range] */
-  assert(index + range <= bytearray->length);
+  assert(index + range <= bytearray_length(bytearray));
 
   return &bytearray->bytes[index];
 }

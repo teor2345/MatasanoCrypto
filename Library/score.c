@@ -65,8 +65,8 @@ bytearray_to_escstr(const bytearray_t *bytearray)
   assert(is_bytearray_consistent(bytearray));
 
   /* One extra byte for the terminating nul */
-  const size_t max_asciistr_len = (bytearray->length * ESCAPED_HEXCHARS_PER_BYTE
-                                   + 1);
+  const size_t max_asciistr_len = (
+                  bytearray_length(bytearray) * ESCAPED_HEXCHARS_PER_BYTE + 1);
   /* If any bytes are printable ASCII, we will use 1 character for them rather
    * than 4 characters. This wastage is ok. */
   char * const asciistr = malloc(max_asciistr_len);
@@ -76,7 +76,7 @@ bytearray_to_escstr(const bytearray_t *bytearray)
 
   size_t i = 0;
   size_t asciistr_pos = 0;
-  for (i = 0; i < bytearray->length; i++) {
+  for (i = 0; i < bytearray_length(bytearray); i++) {
     /* Don't ever overwrite the terminating nul, and allow up to
      * ESCAPED_HEXCHARS_PER_BYTE */
     assert(asciistr_pos + (ESCAPED_HEXCHARS_PER_BYTE - 1)
@@ -96,7 +96,7 @@ bytearray_to_escstr(const bytearray_t *bytearray)
   }
 
   /* Did we actually look at everything, except the terminating nul? */
-  assert(i == bytearray->length);
+  assert(i == bytearray_length(bytearray));
   assert(i * ASCII_CHARS_PER_BYTE <= max_asciistr_len - 1);
   assert(i * ESCAPED_HEXCHARS_PER_BYTE == max_asciistr_len - 1);
 
@@ -120,7 +120,7 @@ count_byte_test(const bytearray_t *bytearray, byte_test_func byte_test)
 
   size_t result = 0;
 
-  for (size_t i = 0; i < bytearray->length; i++) {
+  for (size_t i = 0; i < bytearray_length(bytearray); i++) {
     uint8_t byte = bytearray_get_checked(bytearray, i);
 
     if (byte_test(byte)) {
@@ -128,7 +128,7 @@ count_byte_test(const bytearray_t *bytearray, byte_test_func byte_test)
     }
   }
 
-  assert(result <= bytearray->length);
+  assert(result <= bytearray_length(bytearray));
 
   return result;
 }
@@ -158,7 +158,7 @@ count_letter(const bytearray_t *bytearray, bool include_space)
     result += count_space(bytearray);
   }
 
-  assert(result <= bytearray->length);
+  assert(result <= bytearray_length(bytearray));
 
   return result;
 }
@@ -174,7 +174,7 @@ count_byte(const bytearray_t *bytearray, uint8_t byte)
 
   size_t result = 0;
 
-  for (size_t i = 0; i < bytearray->length; i++) {
+  for (size_t i = 0; i < bytearray_length(bytearray); i++) {
     uint8_t ba_byte = bytearray_get_checked(bytearray, i);
 
     if (byte == ba_byte) {
@@ -182,7 +182,7 @@ count_byte(const bytearray_t *bytearray, uint8_t byte)
     }
   }
 
-  assert(result <= bytearray->length);
+  assert(result <= bytearray_length(bytearray));
 
   return result;
 }
@@ -406,20 +406,20 @@ score_english_text(const bytearray_t *bytearray)
    * On average, English text has certain letter and space frequencies. */
 
   /* Unprintable Maximum */
-  size_t max_unprint = MAX_UNPRINTABLE(bytearray->length);
+  size_t max_unprint = MAX_UNPRINTABLE(bytearray_length(bytearray));
   size_t unprint = count_unprintable(bytearray);
   double unprint_factor = score_max_count(unprint, max_unprint);
   assert(unprint_factor >= 0.0);
 
   /* Non-letter Maximum */
-  size_t max_nonlet = MAX_NONLETTER(bytearray->length);
+  size_t max_nonlet = MAX_NONLETTER(bytearray_length(bytearray));
   size_t nonlet = count_nonletter(bytearray, false);
   double nonlet_factor = score_max_count(nonlet, max_nonlet);
   assert(nonlet_factor >= 0.0);
 
   /* Space Frequency */
   size_t space_count = count_space(bytearray);
-  double space_freq = space_count / (double)bytearray->length;
+  double space_freq = space_count / (double)bytearray_length(bytearray);
   double space_dev = score_letter_frequency(space_freq,
                                               EXPECTED_SPACE_FREQUENCY);
   double scaled_space_dev = scale_good_deviation(space_dev,

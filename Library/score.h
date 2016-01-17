@@ -33,21 +33,21 @@ char *bytearray_to_escstr(const bytearray_t *bytearray);
 
 size_t count_printable(const bytearray_t *bytearray);
 /* Return the number of unprintable ASCII characters in bytearray. */
-#define count_unprintable(b) ((b)->length - count_printable(b))
+#define count_unprintable(b) (bytearray_length(b) - count_printable(b))
 
 size_t count_space(const bytearray_t *bytearray);
 /* Return the number of non-space ASCII characters in bytearray. */
-#define count_nonspace(b) ((b)->length - count_space(b))
+#define count_nonspace(b) (bytearray_length(b) - count_space(b))
 
 size_t count_letter(const bytearray_t *bytearray, bool include_space);
 /* Return the number of non-letter ASCII characters in bytearray. */
 #define count_nonletter(b, include_space) \
-                            ((b)->length - count_letter(b, !(include_space)))
+                    (bytearray_length(b) - count_letter(b, !(include_space)))
 
 size_t count_byte(const bytearray_t *bytearray, uint8_t byte);
 /* Return the number of non-matching bytes in bytearray. */
 #define count_nonbyte(b, byte) \
-                               ((b)->length - count_byte(b, byte))
+                               (bytearray_length(b) - count_byte(b, byte))
 
 double score_english_letter_frequency(const bytearray_t *bytearray);
 double score_english_text(const bytearray_t *bytearray);
