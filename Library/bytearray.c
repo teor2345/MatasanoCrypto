@@ -13,6 +13,8 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "safeint.h"
+
 /* Private Data Types */
 typedef struct bytearray_t {
   size_t length;
@@ -91,10 +93,10 @@ bytearray_dup(const bytearray_t *src)
   assert(src != NULL);
   assert(is_bytearray_consistent(src));
 
-  bytearray_t * const result = bytearray_alloc(src->length);
+  bytearray_t * const result = bytearray_alloc(bytearray_length(src));
   assert(result != NULL);
   assert(is_bytearray_consistent(result));
-  assert(result->length == src->length);
+  assert(result->length == bytearray_length(src));
 
   for (size_t i = 0; i < result->length; i++) {
     uint8_t byte = bytearray_get_checked(src, i);
@@ -175,7 +177,7 @@ bytearray_get_checked(const bytearray_t *bytearray, size_t index)
 /* Return &bytearray->bytes[index], checking that bytearray is valid and
  * accesses to index and range bytes starting at index are within the
  * bytearray's length.
- * Accesses to bytearray[index + range] and higher are not checked.
+ * Accesses to bytearray[index + range] and higher are not allowed.
  * range must not be 0. */
 uint8_t *
 bytearray_pointer_checked(bytearray_t *bytearray, size_t index, size_t range)
@@ -184,9 +186,11 @@ bytearray_pointer_checked(bytearray_t *bytearray, size_t index, size_t range)
   assert(is_bytearray_consistent(bytearray));
   assert(index < bytearray_length(bytearray));
   assert(range > 0);
-  /* This checks access to bytearray[index + range - 1], but not
+  size_t sum = 0;
+  assert(checked_add(index, range, &sum) == 0);
+  /* This allows access to bytearray[index + range - 1], but not
    * bytearray[index + range] */
-  assert(index + range <= bytearray_length(bytearray));
+  assert(sum <= bytearray_length(bytearray));
 
   return &bytearray->bytes[index];
 }
