@@ -32,12 +32,11 @@ is_bytearray_consistent(const bytearray_t *bytearray)
 }
 
 /* Allocate and return a bytearray_t of length using malloc().
+ * bytearrays of length 0 have a NULL bytes member.
  * Must be freed using bytearray_free(). */
 bytearray_t *
 bytearray_alloc(size_t length)
 {
-  assert(length > 0);
-
   bytearray_t * const bytearray = malloc(sizeof(*bytearray));
   bytearray->length = length;
   if (length > 0) {
