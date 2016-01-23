@@ -15,6 +15,8 @@
 
 #include "bytearray.h"
 
+#include "char.h"
+
 /* XOR the bytearrays b1 and b2 into a newly allocated bytearray.
  * If b1 and b2 are different lengths, the shorter bytearray is XORed
  * repeatedly into the longer bytearray. The returned bytearray is as long as
@@ -76,4 +78,39 @@ bytearray_xor_byte(const bytearray_t *bytearray, uint8_t byte)
   bytearray_free(b_byte);
 
   return result;
+}
+
+/* Count the number of bits set in b, and return it. */
+size_t
+bytearray_get_bit_count(const bytearray_t *b)
+{
+  size_t result = 0;
+
+  for (size_t i = 0; i < bytearray_length(b); i++) {
+    uint8_t byte = bytearray_get_checked(b, i);
+    result += byte_get_bit_count(byte);
+  }
+
+  /* The result is at most the number of bits in b */
+  assert(result <= bytearray_length(b) * BYTE_BIT);
+  return result;
+}
+
+
+/* Return the hamming distance between b1 and b2.
+ * b1 and b2 must be the same length, and have at most size_t bits. */
+size_t
+bytearray_hamming(const bytearray_t *b1, const bytearray_t *b2)
+{
+  assert(b1 != NULL);
+  assert(b2 != NULL);
+
+  assert(bytearray_length(b1) == bytearray_length(b2));
+  assert(bytearray_length(b1) <= SIZE_T_MAX / BYTE_BIT);
+
+  bytearray_t *nonmatching = bytearray_xor(b1, b2);
+  assert(nonmatching != NULL);
+  assert(is_bytearray_consistent(nonmatching));
+
+  return bytearray_get_bit_count(nonmatching);
 }

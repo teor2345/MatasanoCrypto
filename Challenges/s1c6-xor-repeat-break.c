@@ -25,6 +25,10 @@
  */
 const char *input_file_path  = "6.txt";
 
+const char *input_hamming_str_1 = "this is a test";
+const char *input_hamming_str_2 = "wokka wokka!!!";
+const size_t input_hamming_result = 37;
+
 /* Implementation */
 
 #define MIN_ENGLISH_TEXT_SCORE 0.1
@@ -37,6 +41,47 @@ main(int argc, const char * argv[])
   /* Unused */
   (void)argc;
   (void)argv;
+
+  /* Check that hamming works */
+  printf("Hamming 1: %s\n", input_hamming_str_1);
+  printf("Hamming 2: %s\n", input_hamming_str_2);
+
+  bytearray_t *input_hamming_bytearray_1 = str_to_bytearray(
+                                                          input_hamming_str_1);
+  bytearray_t *input_hamming_bytearray_2 = str_to_bytearray(
+                                                          input_hamming_str_2);
+
+  char *input_hamming_escstr_1 = bytearray_to_escstr(
+                                                    input_hamming_bytearray_1);
+  printf("Escaped Hamming 1: %s\n", input_hamming_escstr_1);
+  free(input_hamming_escstr_1);
+
+  char *input_hamming_escstr_2 = bytearray_to_escstr(
+                                                    input_hamming_bytearray_2);
+  printf("Escaped Hamming 2: %s\n", input_hamming_escstr_2);
+  free(input_hamming_escstr_2);
+
+  bytearray_t *output_xor_bytearray = bytearray_xor(input_hamming_bytearray_1,
+                                                    input_hamming_bytearray_2);
+
+
+  char *output_xor_escstr = bytearray_to_escstr(output_xor_bytearray);
+  printf("Escaped XOR: %s\n", output_xor_escstr);
+  free(output_xor_escstr);
+
+  bytearray_free(output_xor_bytearray);
+
+  size_t output_hamming_result = bytearray_hamming(input_hamming_bytearray_1,
+                                                   input_hamming_bytearray_2);
+
+  printf("Expected Hamming: %zu\n", input_hamming_result);
+  printf("Hamming Result: %zu\n", output_hamming_result);
+
+  if (output_hamming_result == input_hamming_result) {
+    printf("Expected hamming result matches output hamming result.\n");
+  } else {
+    printf("Expected hamming result does NOT match output hamming result.\n");
+  }
 
   /* Open the file */
   FILE *f = fopen(input_file_path, "r");

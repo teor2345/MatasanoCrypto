@@ -56,3 +56,20 @@ value_to_char(uint8_t value, uint8_t min, uint8_t max, char basis,
 
   return false;
 }
+
+/* Count the number of bits set in byte, and return it. */
+uint8_t
+byte_get_bit_count(uint8_t byte)
+{
+  uint8_t result = 0;
+
+  for (uint8_t i = 0; i < BYTE_BIT; i++) {
+    uint8_t mask = (uint8_t)(1 << i);
+    if (byte & mask) {
+      result++;
+    }
+  }
+
+  assert(result <= BYTE_BIT);
+  return result;
+}

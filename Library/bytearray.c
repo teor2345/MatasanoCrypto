@@ -142,6 +142,7 @@ bytearray_cat(const bytearray_t *src1, const bytearray_t *src2)
 size_t
 bytearray_length(const bytearray_t *bytearray)
 {
+  assert(bytearray != NULL);
   return bytearray->length;
 }
 
