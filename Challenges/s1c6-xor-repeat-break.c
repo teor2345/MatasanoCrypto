@@ -138,7 +138,7 @@ main(int argc, const char * argv[])
   assert(rv == 0);
 
   /* This should match the input file, excluding whitespace, and with trailing
-   * padding replaced with 0 bits encoded in base64 characters */
+   * padding replaced with 0 bits encoded in base64 characters. 000000 = A. */
   char *input_base64str = bytearray_to_base64str(input_bytearray);
   printf("Base64:  %s\n", input_base64str);
   free(input_base64str);
