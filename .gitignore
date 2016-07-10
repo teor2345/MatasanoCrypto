@@ -37,3 +37,7 @@
 
 # backup files
 *~
+
+# Xcode
+xcuserdata
+*.xcuserdatad
